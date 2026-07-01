@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+<template id="__bundler_thumbnail" data-bg-color="#000000">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#000000"/>
+    <circle cx="600" cy="400" r="230" fill="none" stroke="#aab6d4" stroke-opacity="0.28" stroke-width="2"/>
+    <ellipse cx="600" cy="400" rx="330" ry="150" fill="none" stroke="#8fa0c4" stroke-opacity="0.2" stroke-width="2" transform="rotate(-18 600 400)"/>
+    <circle cx="600" cy="400" r="26" fill="#e9edf6"/>
+    <circle cx="838" cy="330" r="7" fill="#dfe7ff"/>
+    <circle cx="360" cy="470" r="6" fill="#cdd6ef"/>
+    <text x="600" y="640" text-anchor="middle" font-family="'Chakra Petch',sans-serif" font-size="80" letter-spacing="18" fill="#dfe4ee" font-weight="600">ASTRIA</text>
+  </svg>
+</template>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=Chakra+Petch:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:#000;color:#e9ecf1;font-family:'Sora',sans-serif;-webkit-font-smoothing:antialiased}
+  ::selection{background:rgba(120,160,255,.35)}
+  ::-webkit-scrollbar{width:10px}
+  ::-webkit-scrollbar-track{background:#000}
+  ::-webkit-scrollbar-thumb{background:linear-gradient(180deg,#3a3f48,#15171b);border-radius:8px}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  @keyframes spinR{to{transform:rotate(-360deg)}}
+  @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+  @keyframes twinkle{0%,100%{opacity:.25}50%{opacity:1}}
+  @keyframes pulseGlow{0%,100%{opacity:.4}50%{opacity:.85}}
+  input,textarea,select,button{font-family:inherit}
+  @media(max-width:840px){[data-desktop-nav]{display:none!important}[data-mobile-burger]{display:block!important}}
+</style>
+</helmet>
+
+<div style="position:relative;min-height:100vh;overflow-x:hidden;background:#000">
+
+  <!-- ===== BACKGROUND LAYERS ===== -->
+  <canvas ref="{{ starCanvas }}" style="position:fixed;inset:0;width:100vw;height:100vh;z-index:0;pointer-events:none"></canvas>
+  <div style="position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(60% 50% at 50% 12%,rgba(40,70,160,.18),transparent 70%),radial-gradient(45% 40% at 82% 78%,rgba(90,60,160,.13),transparent 70%),radial-gradient(40% 35% at 12% 70%,rgba(20,90,140,.1),transparent 70%)"></div>
+  <div ref="{{ orbA }}" style="position:fixed;top:-22vw;left:50%;width:78vw;height:78vw;margin-left:-39vw;border:1px solid rgba(170,190,230,.08);border-radius:50%;z-index:0;pointer-events:none;animation:spin 120s linear infinite"></div>
+  <div ref="{{ orbB }}" style="position:fixed;top:-10vw;left:50%;width:54vw;height:54vw;margin-left:-27vw;border:1px solid rgba(190,205,240,.06);border-radius:50%;z-index:0;pointer-events:none;animation:spinR 90s linear infinite"></div>
+
+  <!-- ===== NAV ===== -->
+  <nav style="position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:16px clamp(20px,5vw,72px);backdrop-filter:blur(16px);background:linear-gradient(180deg,rgba(0,0,0,.72),rgba(0,0,0,.35));border-bottom:1px solid rgba(255,255,255,.06)">
+    <button onClick="{{ goHome }}" style="display:flex;align-items:center;gap:13px;background:none;border:none;cursor:pointer;padding:0">
+      <img src="assets/astria-logo.png" alt="Astria" style="width:46px;height:46px;border-radius:50%;display:block"/>
+      <span style="font-family:'Chakra Petch',sans-serif;font-weight:600;font-size:23px;letter-spacing:.22em;background:linear-gradient(180deg,#ffffff,#c4c9d0 45%,#7d838d 62%,#eef1f4);-webkit-background-clip:text;background-clip:text;color:transparent">ASTRIA</span>
+    </button>
+    <div style="display:flex;align-items:center;gap:6px" data-desktop-nav>
+      <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="5">
+        <button onClick="{{ n.onClick }}" style="background:none;border:none;cursor:pointer;color:{{ n.color }};font-size:14.5px;letter-spacing:.04em;padding:9px 15px;border-radius:10px;transition:color .25s,background .25s" style-hover="background:rgba(255,255,255,.06);color:#fff">{{ n.label }}</button>
+      </sc-for>
+      <button onClick="{{ goContacto }}" style="margin-left:10px;cursor:pointer;border:none;padding:10px 20px;border-radius:11px;font-weight:600;font-size:14px;letter-spacing:.03em;color:#1a1405;background:linear-gradient(180deg,#f6dca6,#cda552);box-shadow:0 6px 22px rgba(205,165,82,.28)" style-hover="box-shadow:0 8px 30px rgba(205,165,82,.5)">Cotizar proyecto</button>
+    </div>
+    <button onClick="{{ toggleMenu }}" data-mobile-burger style="display:none;background:none;border:1px solid rgba(255,255,255,.16);border-radius:10px;color:#fff;cursor:pointer;padding:9px 12px;font-size:18px">≡</button>
+  </nav>
+
+  <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:sticky;top:74px;z-index:49;display:flex;flex-direction:column;gap:4px;padding:14px clamp(20px,5vw,72px);backdrop-filter:blur(16px);background:rgba(0,0,0,.92);border-bottom:1px solid rgba(255,255,255,.08)">
+      <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="5">
+        <button onClick="{{ n.onClick }}" style="text-align:left;background:none;border:none;cursor:pointer;color:#cfd4dc;font-size:16px;padding:12px 6px;border-bottom:1px solid rgba(255,255,255,.05)">{{ n.label }}</button>
+      </sc-for>
+    </div>
+  </sc-if>
+
+  <!-- ===== MAIN ===== -->
+  <main style="position:relative;z-index:10">
+
+    <!-- ============ HOME ============ -->
+    <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+    <div>
+      <section style="position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;padding:clamp(70px,12vh,150px) 22px clamp(60px,9vh,110px)">
+        <div ref="{{ heroOrb }}" style="position:absolute;top:8%;width:min(560px,85vw);height:min(560px,85vw);border:1px solid rgba(180,200,240,.1);border-radius:50%;animation:spin 60s linear infinite">
+          <div style="position:absolute;top:-5px;left:50%;width:9px;height:9px;margin-left:-4px;border-radius:50%;background:#dfe7ff;box-shadow:0 0 18px 4px rgba(150,180,255,.8)"></div>
+        </div>
+        <span data-reveal style="font-family:'Chakra Petch',sans-serif;font-size:13px;letter-spacing:.42em;color:#8fa0c4;margin-bottom:26px">AGENCIA DE SOFTWARE & AGENTES IA</span>
+        <h1 data-reveal style="max-width:14ch;font-weight:600;font-size:clamp(40px,7vw,82px);line-height:1.04;letter-spacing:-.02em;margin-bottom:24px;background:linear-gradient(180deg,#ffffff,#d2d7de 46%,#878d97 66%,#f3f5f8);-webkit-background-clip:text;background-clip:text;color:transparent">Convertimos negocios en sistemas inteligentes</h1>
+        <p data-reveal style="max-width:60ch;font-size:clamp(16px,2vw,20px);line-height:1.6;color:#aeb6c2;margin-bottom:40px">Diseñamos software a medida, agentes de IA y automatizaciones que ponen en órbita tu empresa. Del primer pixel al sistema que trabaja por vos.</p>
+        <div data-reveal style="display:flex;flex-wrap:wrap;gap:16px;justify-content:center">
+          <button onClick="{{ goDemos }}" style="cursor:pointer;border:none;padding:15px 30px;border-radius:13px;font-weight:600;font-size:15.5px;letter-spacing:.02em;color:#1a1405;background:linear-gradient(180deg,#f6dca6,#cda552);box-shadow:0 8px 30px rgba(205,165,82,.3)" style-hover="box-shadow:0 12px 40px rgba(205,165,82,.55)">Ver demos en vivo</button>
+          <button onClick="{{ goPrecios }}" style="cursor:pointer;padding:15px 30px;border-radius:13px;font-weight:500;font-size:15.5px;color:#e9ecf1;background:linear-gradient(160deg,rgba(255,255,255,.08),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.16);backdrop-filter:blur(10px)" style-hover="border-color:rgba(255,255,255,.4)">Ver planes</button>
+        </div>
+      </section>
+
+      <!-- services cards -->
+      <section style="max-width:1200px;margin:0 auto;padding:30px clamp(20px,5vw,40px) 90px">
+        <div data-reveal style="display:flex;align-items:end;justify-content:space-between;gap:20px;margin-bottom:38px;flex-wrap:wrap">
+          <div>
+            <span style="font-family:'Chakra Petch',sans-serif;font-size:12px;letter-spacing:.34em;color:#7e8ba8">LÍNEAS DE TRABAJO</span>
+            <h2 style="font-size:clamp(28px,4vw,42px);font-weight:600;letter-spacing:-.01em;margin-top:10px">Cuatro órbitas de servicio</h2>
+          </div>
+          <button onClick="{{ goServicios }}" style="background:none;border:none;cursor:pointer;color:#9fc0ff;font-size:15px" style-hover="color:#fff">Ver todos los servicios →</button>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px">
+          <sc-for list="{{ homeServices }}" as="s" hint-placeholder-count="4">
+            <button data-reveal onClick="{{ s.onClick }}" style="text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:15px;padding:28px 26px;border-radius:20px;background:linear-gradient(160deg,rgba(255,255,255,.1),rgba(255,255,255,.03));border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(14px);transition:transform .4s,border-color .4s,box-shadow .4s" style-hover="transform:translateY(-6px);border-color:rgba(150,180,255,.5);box-shadow:0 18px 50px rgba(60,90,200,.28)">
+              <div style="position:relative;width:54px;height:54px;display:grid;place-items:center">
+                <div style="position:absolute;inset:0;border:1px solid rgba(180,200,250,.5);border-radius:50%"></div>
+                <div style="position:absolute;inset:8px;border:1px solid rgba(180,200,250,.24);border-radius:50%;transform:rotate(28deg) scaleY(.5)"></div>
+                <div style="width:11px;height:11px;border-radius:50%;background:linear-gradient(180deg,#fff,#9aa3ad);box-shadow:0 0 14px 2px rgba(160,190,255,.7)"></div>
+              </div>
+              <h3 style="font-size:20px;font-weight:600;color:#f4f6f9">{{ s.label }}</h3>
+              <p style="font-size:14.5px;line-height:1.55;color:#b6bdc9">{{ s.desc }}</p>
+              <div style="margin-top:2px;display:inline-flex;align-items:center;gap:8px;align-self:start;font-size:12.5px;letter-spacing:.01em;color:#e7d4a6;padding:7px 13px;border-radius:999px;background:rgba(205,165,82,.1);border:1px solid rgba(205,165,82,.28)"><span style="font-size:11px">✦</span>{{ s.benefit }}</div>
+            </button>
+          </sc-for>
+        </div>
+      </section>
+
+      <!-- why astria -->
+      <section style="max-width:1180px;margin:0 auto;padding:0 clamp(20px,5vw,40px) 100px">
+        <div data-reveal style="text-align:center;margin-bottom:44px">
+          <span style="font-family:'Chakra Petch',sans-serif;font-size:12px;letter-spacing:.34em;color:#7e8ba8">DIFERENCIAL</span>
+          <h2 style="font-size:clamp(28px,4vw,44px);font-weight:600;letter-spacing:-.01em;margin-top:12px;background:linear-gradient(180deg,#ffffff,#d2d7de 46%,#878d97 66%,#f3f5f8);-webkit-background-clip:text;background-clip:text;color:transparent">¿Por qué ASTRIA?</h2>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px">
+          <sc-for list="{{ why }}" as="w" hint-placeholder-count="4">
+            <div data-reveal style="position:relative;overflow:hidden;display:flex;flex-direction:column;gap:16px;padding:30px 28px;border-radius:22px;background:linear-gradient(160deg,rgba(255,255,255,.09),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(14px);transition:transform .4s,border-color .4s,box-shadow .4s" style-hover="transform:translateY(-6px);border-color:rgba(150,180,255,.5);box-shadow:0 22px 60px rgba(60,90,200,.28)">
+              <div style="position:absolute;top:-30%;right:-20%;width:180px;height:180px;border-radius:50%;background:radial-gradient(50% 50% at 50% 50%,rgba(120,150,255,.18),transparent 70%);pointer-events:none"></div>
+              <div style="position:relative;width:60px;height:60px;display:grid;place-items:center">
+                <div style="position:absolute;inset:0;border:1px solid rgba(180,200,250,.5);border-radius:50%"></div>
+                <div style="position:absolute;inset:9px;border:1px solid rgba(180,200,250,.24);border-radius:50%;transform:rotate({{ w.tilt }}) scaleY(.5)"></div>
+                <div style="position:relative;filter:drop-shadow(0 0 9px rgba(150,180,255,.55))">{{ w.icon }}</div>
+              </div>
+              <h3 style="position:relative;font-size:19px;font-weight:600;color:#f4f6f9">{{ w.title }}</h3>
+              <p style="position:relative;font-size:14.5px;line-height:1.58;color:#b6bdc9">{{ w.desc }}</p>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+
+      <!-- big CTA -->
+      <section style="max-width:1100px;margin:0 auto 110px;padding:0 clamp(20px,5vw,40px)">
+        <div data-reveal style="position:relative;overflow:hidden;text-align:center;padding:clamp(48px,7vw,84px) 28px;border-radius:28px;border:1px solid rgba(255,255,255,.1);background:linear-gradient(160deg,rgba(40,60,130,.28),rgba(255,255,255,.02))">
+          <div style="position:absolute;top:-40%;left:50%;width:60%;height:160%;margin-left:-30%;background:radial-gradient(50% 50% at 50% 50%,rgba(120,150,255,.25),transparent 70%);animation:pulseGlow 6s ease-in-out infinite;pointer-events:none"></div>
+          <h2 style="position:relative;font-size:clamp(28px,4.5vw,48px);font-weight:600;letter-spacing:-.01em;margin-bottom:18px">¿Listo para entrar en órbita?</h2>
+          <p style="position:relative;max-width:52ch;margin:0 auto 32px;color:#b3bccb;font-size:17px;line-height:1.6">Contanos qué necesitás y armamos un sistema a tu medida. Sin plantillas, sin humo.</p>
+          <div style="position:relative;display:flex;gap:15px;justify-content:center;flex-wrap:wrap">
+            <button onClick="{{ goContacto }}" style="cursor:pointer;border:none;padding:15px 32px;border-radius:13px;font-weight:600;font-size:15.5px;color:#1a1405;background:linear-gradient(180deg,#f6dca6,#cda552)">Cotizar mi proyecto</button>
+            <button onClick="{{ goDemos }}" style="cursor:pointer;padding:15px 32px;border-radius:13px;font-weight:500;font-size:15.5px;color:#e9ecf1;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.18)">Explorar demos</button>
+          </div>
+        </div>
+      </section>
+    </div>
+    </sc-if>
+
+    <!-- ============ SERVICIOS ============ -->
+    <sc-if value="{{ isServicios }}" hint-placeholder-val="{{ false }}">
+    <div style="max-width:1180px;margin:0 auto;padding:clamp(50px,8vh,90px) clamp(20px,5vw,40px) 100px">
+      <span data-reveal style="font-family:'Chakra Petch',sans-serif;font-size:13px;letter-spacing:.36em;color:#8fa0c4">SERVICIOS</span>
+      <h1 data-reveal style="font-size:clamp(34px,5.5vw,60px);font-weight:600;letter-spacing:-.02em;margin:14px 0 18px;max-width:18ch">Sistemas que trabajan a la velocidad de tu negocio</h1>
+      <p data-reveal style="max-width:58ch;color:#aeb6c2;font-size:18px;line-height:1.6;margin-bottom:54px">Cada servicio es una pieza de ingeniería: diseño premium por fuera, automatización e IA por dentro.</p>
+      <div style="display:flex;flex-direction:column;gap:22px">
+        <sc-for list="{{ servicios }}" as="s" hint-placeholder-count="4">
+          <div data-reveal style="display:grid;grid-template-columns:auto 1fr;gap:clamp(20px,4vw,46px);align-items:start;padding:clamp(28px,4vw,44px);border-radius:24px;background:linear-gradient(160deg,rgba(255,255,255,.06),rgba(255,255,255,.015));border:1px solid rgba(255,255,255,.1);backdrop-filter:blur(14px);transition:border-color .4s,box-shadow .4s" style-hover="border-color:rgba(150,180,255,.4);box-shadow:0 20px 60px rgba(60,90,200,.18)">
+            <div style="position:relative;width:92px;height:92px;display:grid;place-items:center">
+              <div style="position:absolute;inset:0;border:1.5px solid rgba(190,205,245,.5);border-radius:50%;animation:spin 28s linear infinite"></div>
+              <div style="position:absolute;inset:14px;border:1px solid rgba(190,205,245,.25);border-radius:50%;transform:rotate(32deg) scaleY(.46)"></div>
+              <div style="position:absolute;inset:14px;border:1px solid rgba(190,205,245,.18);border-radius:50%;transform:rotate(-32deg) scaleY(.46)"></div>
+              <span style="font-family:'Chakra Petch',sans-serif;font-size:26px;font-weight:600;background:linear-gradient(180deg,#fff,#9aa3ad);-webkit-background-clip:text;background-clip:text;color:transparent">{{ s.glyph }}</span>
+            </div>
+            <div>
+              <h3 style="font-size:clamp(22px,3vw,30px);font-weight:600;margin-bottom:12px">{{ s.title }}</h3>
+              <p style="color:#aeb6c2;font-size:16px;line-height:1.62;max-width:62ch;margin-bottom:18px">{{ s.desc }}</p>
+              <div style="display:flex;flex-wrap:wrap;gap:9px">
+                <sc-for list="{{ s.bullets }}" as="b" hint-placeholder-count="3">
+                  <span style="font-size:13px;letter-spacing:.02em;color:#c4cbd6;padding:7px 14px;border-radius:999px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1)">{{ b }}</span>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    </sc-if>
+
+    <!-- ============ DEMOS ============ -->
+    <sc-if value="{{ isDemos }}" hint-placeholder-val="{{ false }}">
+    <div style="max-width:1200px;margin:0 auto;padding:clamp(50px,8vh,90px) clamp(20px,5vw,40px) 100px">
+      <span data-reveal style="font-family:'Chakra Petch',sans-serif;font-size:13px;letter-spacing:.36em;color:#8fa0c4">SHOWCASE</span>
+      <h1 data-reveal style="font-size:clamp(34px,5.5vw,60px);font-weight:600;letter-spacing:-.02em;margin:14px 0 18px;max-width:16ch">Demos & proyectos reales</h1>
+      <p data-reveal style="max-width:56ch;color:#aeb6c2;font-size:18px;line-height:1.6;margin-bottom:50px">Casos que ya están en órbita. Explorá las capturas o entrá a la demo en vivo cuando esté disponible.</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:24px">
+        <sc-for list="{{ projects }}" as="p" hint-placeholder-count="5">
+          <div data-reveal style="display:flex;flex-direction:column;border-radius:22px;overflow:hidden;background:linear-gradient(160deg,rgba(255,255,255,.07),rgba(255,255,255,.015));border:1px solid rgba(255,255,255,.1);backdrop-filter:blur(14px);transition:transform .4s,border-color .4s,box-shadow .4s" style-hover="transform:translateY(-6px);border-color:rgba(150,180,255,.45);box-shadow:0 22px 60px rgba(60,90,200,.24)">
+            <div style="position:relative;aspect-ratio:16/10;background:repeating-linear-gradient(135deg,rgba(255,255,255,.04) 0 11px,rgba(255,255,255,.015) 11px 22px);display:grid;place-items:center;border-bottom:1px solid rgba(255,255,255,.08)">
+              <div style="position:absolute;inset:0;background:radial-gradient(60% 80% at 50% 0%,rgba(80,110,220,.18),transparent 70%)"></div>
+              <span style="font-family:'Chakra Petch',monospace;font-size:12px;letter-spacing:.14em;color:#7e8696;padding:7px 14px;border:1px dashed rgba(255,255,255,.18);border-radius:8px">captura · {{ p.name }}</span>
+              <span style="position:absolute;top:14px;left:14px;font-size:11px;letter-spacing:.16em;font-family:'Chakra Petch',sans-serif;color:#a9b6d4;padding:5px 11px;border-radius:999px;background:rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.14)">{{ p.cat }}</span>
+            </div>
+            <div style="padding:22px 22px 24px;display:flex;flex-direction:column;gap:14px;flex:1">
+              <h3 style="font-size:21px;font-weight:600">{{ p.name }}</h3>
+              <p style="font-size:14px;line-height:1.55;color:#a7afbb;flex:1">{{ p.desc }}</p>
+              <div style="display:flex;flex-wrap:wrap;gap:7px">
+                <sc-for list="{{ p.tags }}" as="t" hint-placeholder-count="3">
+                  <span style="font-size:11.5px;letter-spacing:.03em;color:#bcc4d0;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09)">{{ t }}</span>
+                </sc-for>
+              </div>
+              <div style="display:flex;gap:10px;margin-top:6px">
+                <button onClick="{{ p.open }}" style="flex:1;cursor:pointer;padding:11px;border-radius:11px;font-weight:600;font-size:13.5px;color:#0c0c10;background:linear-gradient(180deg,#eef1f4,#aab0ba);border:none">Ver capturas</button>
+                <button onClick="{{ p.openLive }}" disabled="{{ p.liveDisabled }}" title="{{ p.liveTitle }}" style="flex:1;cursor:{{ p.liveCursor }};padding:11px;border-radius:11px;font-weight:500;font-size:13.5px;color:{{ p.liveColor }};background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.14)">{{ p.liveLabel }}</button>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    </sc-if>
+
+    <!-- ============ PRECIOS ============ -->
+    <sc-if value="{{ isPrecios }}" hint-placeholder-val="{{ false }}">
+    <div style="max-width:1180px;margin:0 auto;padding:clamp(50px,8vh,90px) clamp(20px,5vw,40px) 100px">
+      <div style="text-align:center;margin-bottom:56px">
+        <span data-reveal style="font-family:'Chakra Petch',sans-serif;font-size:13px;letter-spacing:.36em;color:#8fa0c4">PLANES</span>
+        <h1 data-reveal style="font-size:clamp(34px,5.5vw,60px);font-weight:600;letter-spacing:-.02em;margin:14px 0 16px">Proyectos a medida, no plantillas</h1>
+        <p data-reveal style="max-width:54ch;margin:0 auto;color:#aeb6c2;font-size:18px;line-height:1.6">Cada proyecto se cotiza según alcance. Elegí el punto de partida y armamos la propuesta.</p>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:22px;align-items:stretch">
+        <sc-for list="{{ plans }}" as="p" hint-placeholder-count="3">
+          <div data-reveal style="position:relative;display:flex;flex-direction:column;padding:34px 30px 32px;border-radius:24px;background:{{ p.bg }};border:1px solid {{ p.border }};backdrop-filter:blur(14px);transition:transform .4s,box-shadow .4s" style-hover="transform:translateY(-6px);box-shadow:0 24px 60px rgba(60,90,200,.22)">
+            <sc-if value="{{ p.featured }}" hint-placeholder-val="{{ false }}">
+              <span style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);font-size:11px;letter-spacing:.18em;font-family:'Chakra Petch',sans-serif;color:#1a1405;background:linear-gradient(180deg,#f6dca6,#cda552);padding:6px 16px;border-radius:999px">MÁS ELEGIDO</span>
+            </sc-if>
+            <h3 style="font-size:24px;font-weight:600;margin-bottom:8px">{{ p.name }}</h3>
+            <p style="font-size:14px;color:#a7afbb;line-height:1.5;margin-bottom:18px;min-height:42px">{{ p.tagline }}</p>
+            <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:22px">
+              <span style="font-size:13px;color:#8a93a2">desde</span>
+              <span style="font-size:30px;font-weight:600;background:linear-gradient(180deg,#fff,#9aa3ad);-webkit-background-clip:text;background-clip:text;color:transparent">{{ p.from }}</span>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:11px;margin-bottom:28px;flex:1">
+              <sc-for list="{{ p.features }}" as="f" hint-placeholder-count="5">
+                <div style="display:flex;gap:11px;align-items:start;font-size:14px;color:#c4cbd6;line-height:1.45"><span style="color:#9fc0ff;margin-top:1px">◇</span><span>{{ f }}</span></div>
+              </sc-for>
+            </div>
+            <button onClick="{{ goContacto }}" style="cursor:pointer;width:100%;padding:14px;border-radius:13px;font-weight:600;font-size:15px;border:none;color:{{ p.ctaColor }};background:{{ p.ctaBg }}">Cotizar mi proyecto</button>
+          </div>
+        </sc-for>
+      </div>
+
+      <!-- comparison table -->
+      <h2 data-reveal style="font-size:clamp(24px,3.5vw,34px);font-weight:600;margin:80px 0 28px;text-align:center">Comparativa de features</h2>
+      <div data-reveal style="overflow-x:auto;border-radius:20px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.02)">
+        <table style="width:100%;border-collapse:collapse;min-width:560px">
+          <thead>
+            <tr>
+              <th style="text-align:left;padding:18px 22px;font-size:13px;letter-spacing:.08em;color:#8a93a2;font-weight:500;border-bottom:1px solid rgba(255,255,255,.1)">Feature</th>
+              <th style="padding:18px 16px;font-size:15px;font-weight:600;border-bottom:1px solid rgba(255,255,255,.1)">Básico</th>
+              <th style="padding:18px 16px;font-size:15px;font-weight:600;color:#f0d59e;border-bottom:1px solid rgba(255,255,255,.1)">Pro</th>
+              <th style="padding:18px 16px;font-size:15px;font-weight:600;border-bottom:1px solid rgba(255,255,255,.1)">Enterprise</th>
+            </tr>
+          </thead>
+          <tbody>
+            <sc-for list="{{ comparison }}" as="r" hint-placeholder-count="5">
+              <tr>
+                <td style="padding:16px 22px;font-size:14.5px;color:#cfd4dc;border-bottom:1px solid rgba(255,255,255,.05)">{{ r.label }}</td>
+                <td style="text-align:center;padding:16px;font-size:14px;color:#aab2bf;border-bottom:1px solid rgba(255,255,255,.05)">{{ r.basic }}</td>
+                <td style="text-align:center;padding:16px;font-size:14px;color:#e9ecf1;border-bottom:1px solid rgba(255,255,255,.05);background:rgba(240,213,158,.04)">{{ r.pro }}</td>
+                <td style="text-align:center;padding:16px;font-size:14px;color:#aab2bf;border-bottom:1px solid rgba(255,255,255,.05)">{{ r.ent }}</td>
+              </tr>
+            </sc-for>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    </sc-if>
+
+    <!-- ============ CONTACTO ============ -->
+    <sc-if value="{{ isContacto }}" hint-placeholder-val="{{ false }}">
+    <div style="max-width:1100px;margin:0 auto;padding:clamp(50px,8vh,90px) clamp(20px,5vw,40px) 110px;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:clamp(30px,5vw,64px);align-items:center">
+      <div style="display:flex;flex-direction:column;align-items:center;text-align:center">
+        <div style="position:relative;width:min(300px,70vw);height:min(300px,70vw);display:grid;place-items:center;margin-bottom:18px">
+          <div style="position:absolute;inset:0;border:1px solid rgba(180,200,250,.22);border-radius:50%;animation:spin 40s linear infinite"></div>
+          <div style="position:absolute;inset:34px;border:1px solid rgba(180,200,250,.16);border-radius:50%;transform:rotate(30deg) scaleY(.5)"></div>
+          <div style="position:absolute;inset:60px;border:1px solid rgba(180,200,250,.1);border-radius:50%;animation:spinR 26s linear infinite"></div>
+          <div style="position:absolute;inset:0;border-radius:50%;background:radial-gradient(50% 50% at 50% 50%,rgba(110,140,255,.18),transparent 70%);animation:pulseGlow 6s ease-in-out infinite"></div>
+          <img src="assets/astria-logo.png" alt="Astria" style="width:42%;height:42%;border-radius:50%;animation:floaty 7s ease-in-out infinite"/>
+        </div>
+        <span style="font-family:'Chakra Petch',sans-serif;font-size:12px;letter-spacing:.32em;color:#8fa0c4;margin-bottom:8px">ESCRIBINOS</span>
+        <a href="mailto:somos@somosastria.com.ar" style="font-size:clamp(18px,3vw,24px);font-weight:500;text-decoration:none;background:linear-gradient(180deg,#fff,#c4c9d0 50%,#7d838d);-webkit-background-clip:text;background-clip:text;color:transparent">somos@somosastria.com.ar</a>
+      </div>
+
+      <div style="padding:clamp(28px,4vw,40px);border-radius:24px;background:linear-gradient(160deg,rgba(255,255,255,.07),rgba(255,255,255,.015));border:1px solid rgba(255,255,255,.1);backdrop-filter:blur(14px)">
+        <sc-if value="{{ sent }}" hint-placeholder-val="{{ false }}">
+          <div style="text-align:center;padding:30px 10px">
+            <div style="font-size:42px;margin-bottom:14px">✦</div>
+            <h3 style="font-size:24px;font-weight:600;margin-bottom:10px">Mensaje en órbita</h3>
+            <p style="color:#aeb6c2;line-height:1.6">Gracias, {{ sentName }}. Te respondemos a la brevedad desde somos@somosastria.com.ar.</p>
+          </div>
+        </sc-if>
+        <sc-if value="{{ notSent }}" hint-placeholder-val="{{ true }}">
+        <div>
+          <h2 style="font-size:26px;font-weight:600;margin-bottom:6px">Contanos tu proyecto</h2>
+          <p style="color:#a7afbb;font-size:14.5px;margin-bottom:26px">Completá el formulario y armamos una propuesta a medida.</p>
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <label style="display:flex;flex-direction:column;gap:7px;font-size:13px;letter-spacing:.04em;color:#9aa3b2">Nombre
+              <input ref="{{ fName }}" type="text" placeholder="Tu nombre" style="padding:13px 15px;border-radius:11px;background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.14);color:#fff;font-size:15px;outline:none" style-focus="border-color:rgba(150,180,255,.6)"/>
+            </label>
+            <label style="display:flex;flex-direction:column;gap:7px;font-size:13px;letter-spacing:.04em;color:#9aa3b2">Email
+              <input ref="{{ fEmail }}" type="email" placeholder="tu@email.com" style="padding:13px 15px;border-radius:11px;background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.14);color:#fff;font-size:15px;outline:none" style-focus="border-color:rgba(150,180,255,.6)"/>
+            </label>
+            <label style="display:flex;flex-direction:column;gap:7px;font-size:13px;letter-spacing:.04em;color:#9aa3b2">Tipo de proyecto
+              <select ref="{{ fType }}" style="padding:13px 15px;border-radius:11px;background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.14);color:#fff;font-size:15px;outline:none">
+                <option>Página / Landing web</option>
+                <option>CRM & Automatización IA</option>
+                <option>E-commerce</option>
+                <option>CRM Administrativo-Contable</option>
+                <option>Otro / No estoy seguro</option>
+              </select>
+            </label>
+            <label style="display:flex;flex-direction:column;gap:7px;font-size:13px;letter-spacing:.04em;color:#9aa3b2">Mensaje
+              <textarea ref="{{ fMsg }}" rows="4" placeholder="Contanos qué necesitás…" style="padding:13px 15px;border-radius:11px;background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.14);color:#fff;font-size:15px;outline:none;resize:vertical" style-focus="border-color:rgba(150,180,255,.6)"></textarea>
+            </label>
+            <button onClick="{{ submitForm }}" style="cursor:pointer;margin-top:6px;padding:15px;border-radius:13px;font-weight:600;font-size:15.5px;border:none;color:#1a1405;background:linear-gradient(180deg,#f6dca6,#cda552);box-shadow:0 8px 30px rgba(205,165,82,.3)">Enviar a órbita</button>
+          </div>
+        </div>
+        </sc-if>
+      </div>
+    </div>
+    </sc-if>
+
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer style="position:relative;z-index:10;border-top:1px solid rgba(255,255,255,.07);background:rgba(0,0,0,.5);backdrop-filter:blur(10px)">
+    <div style="max-width:1200px;margin:0 auto;padding:48px clamp(20px,5vw,40px);display:flex;flex-wrap:wrap;gap:34px;justify-content:space-between;align-items:start">
+      <div style="max-width:320px">
+        <div style="display:flex;align-items:center;gap:11px;margin-bottom:12px">
+          <img src="assets/astria-logo.png" alt="Astria" style="width:40px;height:40px;border-radius:50%;display:block"/>
+          <span style="font-family:'Chakra Petch',sans-serif;font-weight:600;font-size:21px;letter-spacing:.24em;background:linear-gradient(180deg,#ffffff,#c4c9d0 45%,#7d838d 62%,#eef1f4);-webkit-background-clip:text;background-clip:text;color:transparent">ASTRIA</span>
+        </div>
+        <p style="font-family:'Chakra Petch',sans-serif;font-size:11px;letter-spacing:.22em;color:#8a93a2;margin-bottom:16px">INTELIGENCIA QUE PONE EN ÓRBITA TU EMPRESA</p>
+        <p style="color:#7e8696;font-size:13.5px;line-height:1.6">Agencia de software & agentes IA. Convertimos negocios en sistemas inteligentes.</p>
+      </div>
+      <div style="display:flex;gap:48px;flex-wrap:wrap">
+        <div style="display:flex;flex-direction:column;gap:11px">
+          <span style="font-size:11px;letter-spacing:.2em;color:#5f6878;margin-bottom:3px">NAVEGAR</span>
+          <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="5">
+            <button onClick="{{ n.onClick }}" style="text-align:left;background:none;border:none;cursor:pointer;color:#aab2bf;font-size:14px" style-hover="color:#fff">{{ n.label }}</button>
+          </sc-for>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:11px">
+          <span style="font-size:11px;letter-spacing:.2em;color:#5f6878;margin-bottom:3px">CONTACTO</span>
+          <a href="mailto:somos@somosastria.com.ar" style="color:#aab2bf;font-size:14px;text-decoration:none" style-hover="color:#fff">somos@somosastria.com.ar</a>
+        </div>
+      </div>
+    </div>
+    <div style="border-top:1px solid rgba(255,255,255,.05);padding:18px clamp(20px,5vw,40px);text-align:center;color:#5a6373;font-size:12.5px">© {{ year }} ASTRIA · Inteligencia que pone en órbita tu empresa</div>
+  </footer>
+
+  <!-- ===== MODAL / LIGHTBOX ===== -->
+  <sc-if value="{{ modalOpen }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ closeModal }}" style="position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:22px;background:rgba(0,0,0,.82);backdrop-filter:blur(10px)">
+    <div onClick="{{ stop }}" style="position:relative;width:min(920px,96vw);max-height:92vh;overflow:auto;border-radius:24px;background:linear-gradient(160deg,rgba(20,24,34,.96),rgba(8,9,13,.96));border:1px solid rgba(255,255,255,.14);box-shadow:0 40px 120px rgba(0,0,0,.7)">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid rgba(255,255,255,.08)">
+        <div>
+          <span style="font-size:11px;letter-spacing:.16em;font-family:'Chakra Petch',sans-serif;color:#9fb0d4">{{ modalCat }}</span>
+          <h3 style="font-size:22px;font-weight:600;margin-top:4px">{{ modalName }}</h3>
+        </div>
+        <button onClick="{{ closeModal }}" style="cursor:pointer;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);color:#fff;font-size:18px">✕</button>
+      </div>
+      <div style="padding:24px">
+        <div style="position:relative;aspect-ratio:16/9;border-radius:16px;overflow:hidden;background:repeating-linear-gradient(135deg,rgba(255,255,255,.05) 0 13px,rgba(255,255,255,.018) 13px 26px);display:grid;place-items:center;border:1px solid rgba(255,255,255,.08)">
+          <div style="position:absolute;inset:0;background:radial-gradient(60% 80% at 50% 0%,rgba(80,110,220,.2),transparent 70%)"></div>
+          <span style="font-family:'Chakra Petch',monospace;font-size:13px;letter-spacing:.14em;color:#8b94a4;padding:9px 16px;border:1px dashed rgba(255,255,255,.2);border-radius:9px">{{ modalShotLabel }}</span>
+          <button onClick="{{ prevShot }}" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);cursor:pointer;width:40px;height:40px;border-radius:50%;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.18);color:#fff;font-size:18px">‹</button>
+          <button onClick="{{ nextShot }}" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);cursor:pointer;width:40px;height:40px;border-radius:50%;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.18);color:#fff;font-size:18px">›</button>
+          <span style="position:absolute;bottom:12px;right:14px;font-size:12px;color:#aeb6c2;background:rgba(0,0,0,.5);padding:4px 10px;border-radius:8px">{{ modalShotIndex }}</span>
+        </div>
+        <p style="color:#aeb6c2;font-size:15px;line-height:1.6;margin:20px 0 16px">{{ modalDesc }}</p>
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          <sc-for list="{{ modalTags }}" as="t" hint-placeholder-count="3">
+            <span style="font-size:12px;color:#bcc4d0;padding:6px 13px;border-radius:8px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1)">{{ t }}</span>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;100%&quot;,&quot;height&quot;:900}}">
+class Component extends DCLogic {
+  state = { page:'home', menuOpen:false, modal:null, shot:0, sent:false, sentName:'' };
+
+  go(p){ this.setState({page:p, menuOpen:false}); window.scrollTo({top:0}); }
+  toggleMenu(){ this.setState(s=>({menuOpen:!s.menuOpen})); }
+
+  componentDidMount(){ this._initStars(); this._observe(); this._mouse(); }
+  componentDidUpdate(_,prev){ if(prev.page!==this.state.page) requestAnimationFrame(()=>this._observe()); }
+
+  _observe(){
+    const els=document.querySelectorAll('[data-reveal]');
+    els.forEach((el,i)=>{
+      el.style.transition='opacity .8s ease '+(i%6*0.06)+'s, transform .8s cubic-bezier(.2,.7,.2,1) '+(i%6*0.06)+'s';
+      el.style.willChange='opacity,transform';
+      if(!el.dataset.seen){ el.style.opacity='0'; el.style.transform='translateY(26px)'; }
+    });
+    if(this._io) this._io.disconnect();
+    this._io=new IntersectionObserver((ents)=>{
+      ents.forEach(e=>{ if(e.isIntersecting){ e.target.style.opacity='1'; e.target.style.transform='none'; e.target.dataset.seen='1'; this._io.unobserve(e.target);} });
+    },{threshold:.12});
+    els.forEach(el=>{ if(!el.dataset.seen) this._io.observe(el); });
+  }
+
+  _mouse(){
+    window.addEventListener('mousemove',(e)=>{
+      const x=(e.clientX/window.innerWidth-.5), y=(e.clientY/window.innerHeight-.5);
+      this._mx=x; this._my=y;
+      if(this.orbA&&this.orbA.current) this.orbA.current.style.transform='translate('+(x*-22)+'px,'+(y*-22)+'px)';
+      if(this.orbB&&this.orbB.current) this.orbB.current.style.transform='translate('+(x*16)+'px,'+(y*16)+'px)';
+    });
+  }
+
+  _initStars(){
+    const cv=this.starCanvas&&this.starCanvas.current; if(!cv) return;
+    const ctx=cv.getContext('2d'); let W,H,stars,dpr;
+    const reset=()=>{ dpr=Math.min(devicePixelRatio||1,2); W=cv.width=innerWidth*dpr; H=cv.height=innerHeight*dpr;
+      const n=Math.round(innerWidth*innerHeight/5200);
+      stars=Array.from({length:n},()=>({x:Math.random()*W,y:Math.random()*H,z:Math.random(),r:(Math.random()*1.3+.3)*dpr,tw:Math.random()*Math.PI*2,sp:Math.random()*.015+.004}));
+    };
+    reset(); addEventListener('resize',reset);
+    const loop=()=>{ ctx.clearRect(0,0,W,H);
+      const sx=(this._mx||0)*30*dpr, sy=(this._my||0)*30*dpr;
+      for(const s of stars){ s.tw+=s.sp; const a=.35+Math.abs(Math.sin(s.tw))*.65;
+        const px=s.x+sx*s.z, py=s.y+sy*s.z;
+        ctx.beginPath(); ctx.arc(px,py,s.r*(.6+s.z*.7),0,7); ctx.fillStyle='rgba('+(200+s.z*55|0)+','+(215+s.z*40|0)+',255,'+a*(.5+s.z*.5)+')'; ctx.fill(); }
+      requestAnimationFrame(loop); };
+    loop();
+  }
+
+  openModal(i){ this.setState({modal:i, shot:0}); }
+  closeModal(){ this.setState({modal:null}); }
+  stop(e){ e.stopPropagation(); }
+  nextShot(){ const p=this._projects()[this.state.modal]; this.setState(s=>({shot:(s.shot+1)%p.shots.length})); }
+  prevShot(){ const p=this._projects()[this.state.modal]; this.setState(s=>({shot:(s.shot-1+p.shots.length)%p.shots.length})); }
+
+  submitForm(){
+    const nm=(this.fName&&this.fName.current&&this.fName.current.value)||'';
+    this.setState({sent:true, sentName:nm||'tripulante'});
+  }
+
+  _projects(){
+    return [
+      {name:'SIPE', cat:'CRM ACADÉMICO', desc:'Sistema integral de gestión académica y administrativa: paneles en tiempo real, automatizaciones e integraciones con HubSpot y WhatsApp.', tags:['Next.js','Supabase','HubSpot','WhatsApp API'], shots:['Dashboard de gestión','Panel de alumnos','Integración WhatsApp'], live:null},
+      {name:'Inmobiliaria Prima Terra', cat:'LANDING PREMIUM', desc:'Landing de lujo para inmobiliaria: storytelling visual, catálogo de propiedades y captación de leads con animaciones de alta gama.', tags:['Next.js','Framer Motion','CMS'], shots:['Hero inmersivo','Catálogo de propiedades','Detalle de propiedad'], live:null},
+      {name:'Concesionaria 2.0', cat:'LANDING AUTOMOTRIZ', desc:'Experiencia tipo "Concesionarias 2.0": showroom digital, configurador visual y agenda de test drives.', tags:['React','Tailwind','Animaciones 3D'], shots:['Showroom digital','Ficha de vehículo','Agenda test drive'], live:null},
+      {name:'E-commerce Galáctico', cat:'TIENDA ONLINE', desc:'Demo de tienda completa: catálogo, carrito, checkout y panel de pedidos con micro-interacciones premium.', tags:['Next.js','Stripe','Supabase'], shots:['Home de tienda','Producto + carrito','Checkout'], live:null},
+      {name:'CRM Administrativo-Contable', cat:'PANEL DE GESTIÓN', desc:'Panel de gestión financiera: facturación, seguimiento de clientes y reportes con paneles de control en vivo.', tags:['React','PostgreSQL','Dashboards'], shots:['Panel financiero','Facturación','Seguimiento de clientes'], live:null}
+    ];
+  }
+
+  _icon(kind){
+    const h=React.createElement, uid='g_'+kind;
+    const defs=h('defs',null,h('linearGradient',{id:uid,x1:'0',y1:'0',x2:'0',y2:'1'},
+      h('stop',{offset:'0',stopColor:'#ffffff'}),
+      h('stop',{offset:'.55',stopColor:'#c4cad2'}),
+      h('stop',{offset:'1',stopColor:'#7c828c'})));
+    const S={width:26,height:26,viewBox:'0 0 24 24',fill:'none',stroke:'url(#'+uid+')',strokeWidth:1.5,strokeLinecap:'round',strokeLinejoin:'round'};
+    const P=(d,extra)=>h('path',Object.assign({d},extra||{}));
+    if(kind==='bolt') return h('svg',S,defs,P('M13 2 4.5 13.2h6.2L11 22l8.5-11.2H13z',{fill:'url(#'+uid+')',fillOpacity:.16}));
+    if(kind==='ai') return h('svg',S,defs,
+      h('circle',{cx:12,cy:12,r:3.1,fill:'url(#'+uid+')',fillOpacity:.22}),
+      h('ellipse',{cx:12,cy:12,rx:9.5,ry:4,transform:'rotate(28 12 12)'}),
+      h('circle',{cx:20.4,cy:8.6,r:1.15,fill:'url(#'+uid+')'}),
+      h('circle',{cx:3.6,cy:15.4,r:1.15,fill:'url(#'+uid+')'}));
+    if(kind==='design') return h('svg',S,defs,
+      P('M12 2 3 8v8l9 6 9-6V8z',{fill:'url(#'+uid+')',fillOpacity:.1}),
+      P('M12 2v20'),P('M3 8l9 6 9-6'));
+    if(kind==='sat') return h('svg',S,defs,
+      h('rect',{x:9,y:9,width:6,height:6,rx:1,transform:'rotate(45 12 12)',fill:'url(#'+uid+')',fillOpacity:.2}),
+      P('M6.5 6.5 3 3M17.5 6.5 21 3M6.5 17.5 3 21M17.5 17.5 21 21'),
+      h('circle',{cx:12,cy:12,r:1.4,fill:'url(#'+uid+')'}));
+    return null;
+  }
+
+  renderVals(){
+    const cur=this.state.page;
+    const mk=(id,label)=>({label, onClick:()=>this.go(id), color: cur===id ? '#ffffff' : '#aab2bf'});
+    const navItems=[mk('home','Home'),mk('servicios','Servicios'),mk('demos','Demos'),mk('precios','Precios'),mk('contacto','Contacto')];
+    const projects=this._projects().map((p,i)=>({...p, open:()=>this.openModal(i),
+      openLive: p.live ? ()=>window.open(p.live,'_blank') : ()=>{},
+      liveDisabled: !p.live, liveLabel: p.live?'Ver demo en vivo':'Demo en vivo · pronto',
+      liveColor: p.live?'#e9ecf1':'#6b7384', liveCursor: p.live?'pointer':'not-allowed',
+      liveTitle: p.live?'Abrir demo en vivo':'Demo en vivo próximamente'}));
+    const mIdx=this.state.modal;
+    const m = mIdx!=null ? this._projects()[mIdx] : null;
+
+    return {
+      page:cur, navItems, menuOpen:this.state.menuOpen,
+      isHome:cur==='home', isServicios:cur==='servicios', isDemos:cur==='demos', isPrecios:cur==='precios', isContacto:cur==='contacto',
+      goHome:()=>this.go('home'), goServicios:()=>this.go('servicios'), goDemos:()=>this.go('demos'), goPrecios:()=>this.go('precios'), goContacto:()=>this.go('contacto'),
+      toggleMenu:()=>this.toggleMenu(),
+      starCanvas:this.starCanvas=this.starCanvas||React.createRef(),
+      orbA:this.orbA=this.orbA||React.createRef(),
+      orbB:this.orbB=this.orbB||React.createRef(),
+      heroOrb:this.heroOrb=this.heroOrb||React.createRef(),
+      year:2026,
+
+      homeServices:[
+        {label:'Páginas Web', desc:'Landings de lujo y sitios a medida con diseño premium y performance impecable.', benefit:'Más consultas y ventas desde tu web', onClick:()=>this.go('servicios')},
+        {label:'CRM & Sistemas IA', desc:'Automatización, agentes de IA e integraciones que trabajan por vos 24/7.', benefit:'Ahorrás horas de trabajo manual', onClick:()=>this.go('servicios')},
+        {label:'E-commerce', desc:'Tiendas online que venden: experiencia de compra fluida y escalable.', benefit:'Vendés online sin fricción', onClick:()=>this.go('servicios')},
+        {label:'Demos en vivo', desc:'Probá nuestros sistemas reales antes de decidir. Sin promesas vacías.', benefit:'Ves el resultado antes de invertir', onClick:()=>this.go('demos')}
+      ],
+      why:[
+        {icon:this._icon('bolt'), tilt:'28deg', title:'Velocidad de entrega', desc:'De la idea al sistema en producción en semanas, no meses.'},
+        {icon:this._icon('ai'), tilt:'-24deg', title:'IA integrada desde el día uno', desc:'Cada sistema que construimos puede incorporar agentes IA, automatizaciones y dashboards inteligentes.'},
+        {icon:this._icon('design'), tilt:'36deg', title:'Diseño de otro nivel', desc:'Interfaces que impresionan a tus clientes antes de que usen una sola función.'},
+        {icon:this._icon('sat'), tilt:'-32deg', title:'Soporte real, no un ticket', desc:'Hablás directo con quien construyó tu sistema. Sin intermediarios.'}
+      ],
+
+      servicios:[
+        {glyph:'01', title:'Páginas Web', desc:'Landings de lujo, sitios para inmobiliarias y concesionarias. Diseño cinematográfico, scroll reveals y carga ultra-rápida que convierte visitantes en clientes.', bullets:['Landings premium','Inmobiliarias','Concesionarias 2.0','SEO técnico']},
+        {glyph:'02', title:'CRM & Automatización IA', desc:'Sistemas tipo SIPE: gestión académica y administrativa, paneles en tiempo real, agentes de IA e integraciones con HubSpot y WhatsApp para que nada se te escape.', bullets:['Paneles en vivo','Agentes IA','HubSpot','WhatsApp API','Integraciones']},
+        {glyph:'03', title:'E-commerce Galáctico', desc:'Tiendas online completas: catálogo, carrito, checkout y panel de pedidos. Experiencia de compra premium pensada para escalar tu facturación.', bullets:['Catálogo','Checkout','Pasarelas de pago','Panel de pedidos']},
+        {glyph:'04', title:'CRM Administrativo-Contable', desc:'Facturación, seguimiento de clientes y paneles financieros en un solo lugar. Control total de tu operación con reportes claros y en tiempo real.', bullets:['Facturación','Seguimiento de clientes','Paneles financieros','Reportes']}
+      ],
+
+      projects,
+
+      plans:[
+        {name:'Básico', tagline:'Para arrancar con presencia digital profesional.', from:'1 página', featured:false, bg:'linear-gradient(160deg,rgba(255,255,255,.06),rgba(255,255,255,.015))', border:'rgba(255,255,255,.1)', ctaBg:'rgba(255,255,255,.08)', ctaColor:'#e9ecf1',
+          features:['Landing o sitio de hasta 3 secciones','Diseño premium responsive','Formulario de contacto','Optimización SEO básica','1 ronda de revisiones']},
+        {name:'Pro', tagline:'El punto justo para negocios en crecimiento.', from:'sistema completo', featured:true, bg:'linear-gradient(160deg,rgba(50,68,140,.3),rgba(255,255,255,.02))', border:'rgba(240,213,158,.4)', ctaBg:'linear-gradient(180deg,#f6dca6,#cda552)', ctaColor:'#1a1405',
+          features:['Sitio multipágina a medida','CRM + automatizaciones IA','Integración HubSpot / WhatsApp','E-commerce opcional','Soporte prioritario','Revisiones ilimitadas']},
+        {name:'Enterprise', tagline:'Sistemas complejos y a gran escala.', from:'plataforma a medida', featured:false, bg:'linear-gradient(160deg,rgba(255,255,255,.06),rgba(255,255,255,.015))', border:'rgba(255,255,255,.1)', ctaBg:'rgba(255,255,255,.08)', ctaColor:'#e9ecf1',
+          features:['Plataforma & CRM completo','Agentes IA personalizados','Integraciones ilimitadas','Paneles financieros y reportes','Infraestructura escalable','Soporte dedicado & SLA']}
+      ],
+      comparison:[
+        {label:'Páginas / secciones', basic:'Hasta 3', pro:'Ilimitadas', ent:'A medida'},
+        {label:'CRM & paneles', basic:'—', pro:'Incluido', ent:'Avanzado'},
+        {label:'Agentes IA & automatización', basic:'—', pro:'Básico', ent:'Personalizado'},
+        {label:'Integraciones (HubSpot/WhatsApp)', basic:'—', pro:'✓', ent:'Ilimitadas'},
+        {label:'E-commerce', basic:'Opcional', pro:'✓', ent:'✓'},
+        {label:'Soporte', basic:'Estándar', pro:'Prioritario', ent:'Dedicado + SLA'}
+      ],
+
+      // form
+      fName:this.fName=this.fName||React.createRef(),
+      fEmail:this.fEmail=this.fEmail||React.createRef(),
+      fType:this.fType=this.fType||React.createRef(),
+      fMsg:this.fMsg=this.fMsg||React.createRef(),
+      submitForm:()=>this.submitForm(),
+      sent:this.state.sent, notSent:!this.state.sent, sentName:this.state.sentName,
+
+      // modal
+      modalOpen: mIdx!=null,
+      closeModal:()=>this.closeModal(), stop:(e)=>this.stop(e),
+      nextShot:(e)=>{this.stop(e);this.nextShot();}, prevShot:(e)=>{this.stop(e);this.prevShot();},
+      modalName: m?m.name:'', modalCat: m?m.cat:'', modalDesc: m?m.desc:'', modalTags: m?m.tags:[],
+      modalShotLabel: m?('captura · '+m.shots[this.state.shot]):'',
+      modalShotIndex: m?((this.state.shot+1)+' / '+m.shots.length):''
+    };
+  }
+}
+</script>
+</body>
+</html>
