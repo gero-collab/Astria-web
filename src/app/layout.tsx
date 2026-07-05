@@ -17,12 +17,22 @@ const chakraPetch = Chakra_Petch({
   weight: ["300", "400", "500", "600", "700"],
 });
 
+const title = "ASTRIA — Agencia de software & agentes IA";
+const description =
+  "Diseñamos y desarrollamos sistemas a medida, páginas web premium, e-commerce y agentes IA para empresas y comercios. Desde Neuquén para todo el mundo.";
+
 export const metadata: Metadata = {
-  title: "ASTRIA — Agencia de software & agentes IA",
-  description:
-    "Convertimos negocios en sistemas inteligentes. Diseñamos software a medida, agentes de IA y automatizaciones que ponen en órbita tu empresa.",
+  metadataBase: new URL("https://somosastria.com.ar"),
+  title,
+  description,
   icons: {
     icon: "/images/astria-logo.png",
+  },
+  openGraph: {
+    title,
+    description,
+    url: "https://somosastria.com.ar",
+    images: ["/images/astria-logo.png"],
   },
 };
 

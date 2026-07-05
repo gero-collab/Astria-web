@@ -12,6 +12,14 @@ export const navItems: NavItem[] = [
   { label: "Contacto", href: "/contacto" },
 ];
 
+export const footerLinks: NavItem[] = [
+  { label: "Home", href: "/" },
+  { label: "Sistemas", href: "/sistemas" },
+  { label: "Agente IA", href: "/agente-ia" },
+  { label: "Precios", href: "/precios" },
+  { label: "Contacto", href: "/contacto" },
+];
+
 export type HomeService = {
   label: string;
   desc: string;
@@ -324,88 +332,58 @@ export const demoDetails: DemoDetail[] = [
   },
 ];
 
-export type Plan = {
+export type PriceProduct = {
+  slug: string;
   name: string;
   tagline: string;
-  from: string;
-  featured: boolean;
-  bg: string;
-  border: string;
-  ctaBg: string;
-  ctaColor: string;
+  basePriceUSD: number;
+  basePriceARS: number;
+  aiAddonUSD: number;
+  aiAddonARS: number;
   features: string[];
 };
 
-export const plans: Plan[] = [
+export const priceProducts: PriceProduct[] = [
   {
-    name: "Básico",
-    tagline: "Para arrancar con presencia digital profesional.",
-    from: "1 página",
-    featured: false,
-    bg: "linear-gradient(160deg,rgba(255,255,255,.06),rgba(255,255,255,.015))",
-    border: "rgba(255,255,255,.1)",
-    ctaBg: "rgba(255,255,255,.08)",
-    ctaColor: "#e9ecf1",
-    features: [
-      "Landing o sitio de hasta 3 secciones",
-      "Diseño premium responsive",
-      "Formulario de contacto",
-      "Optimización SEO básica",
-      "1 ronda de revisiones",
-    ],
+    slug: "landing",
+    name: "Página web / Landing",
+    tagline: "Presencia digital profesional para tu marca o negocio.",
+    basePriceUSD: 400,
+    basePriceARS: 400000,
+    aiAddonUSD: 300,
+    aiAddonARS: 300000,
+    features: ["Diseño premium responsive", "Formulario de contacto", "Optimización SEO básica"],
   },
   {
-    name: "Pro",
-    tagline: "El punto justo para negocios en crecimiento.",
-    from: "sistema completo",
-    featured: true,
-    bg: "linear-gradient(160deg,rgba(50,68,140,.3),rgba(255,255,255,.02))",
-    border: "rgba(240,213,158,.4)",
-    ctaBg: "linear-gradient(180deg,#f6dca6,#cda552)",
-    ctaColor: "#1a1405",
-    features: [
-      "Sitio multipágina a medida",
-      "CRM + automatizaciones IA",
-      "Integración HubSpot / WhatsApp",
-      "E-commerce opcional",
-      "Soporte prioritario",
-      "Revisiones ilimitadas",
-    ],
+    slug: "ecommerce-sirius",
+    name: "E-commerce Sirius",
+    tagline: "Tienda online completa: catálogo, carrito y checkout.",
+    basePriceUSD: 800,
+    basePriceARS: 800000,
+    aiAddonUSD: 400,
+    aiAddonARS: 400000,
+    features: ["Catálogo y carrito", "Checkout y pasarelas de pago", "Panel de pedidos"],
   },
   {
-    name: "Enterprise",
-    tagline: "Sistemas complejos y a gran escala.",
-    from: "plataforma a medida",
-    featured: false,
-    bg: "linear-gradient(160deg,rgba(255,255,255,.06),rgba(255,255,255,.015))",
-    border: "rgba(255,255,255,.1)",
-    ctaBg: "rgba(255,255,255,.08)",
-    ctaColor: "#e9ecf1",
-    features: [
-      "Plataforma & CRM completo",
-      "Agentes IA personalizados",
-      "Integraciones ilimitadas",
-      "Paneles financieros y reportes",
-      "Infraestructura escalable",
-      "Soporte dedicado & SLA",
-    ],
+    slug: "orbi-crm",
+    name: "ORBI CRM",
+    tagline: "CRM con pipeline visual y reportes en tiempo real.",
+    basePriceUSD: 1500,
+    basePriceARS: 1500000,
+    aiAddonUSD: 500,
+    aiAddonARS: 500000,
+    features: ["Pipeline visual", "Gestión de clientes", "Reportes automáticos"],
   },
-];
-
-export type ComparisonRow = {
-  label: string;
-  basic: string;
-  pro: string;
-  ent: string;
-};
-
-export const comparison: ComparisonRow[] = [
-  { label: "Páginas / secciones", basic: "Hasta 3", pro: "Ilimitadas", ent: "A medida" },
-  { label: "CRM & paneles", basic: "—", pro: "Incluido", ent: "Avanzado" },
-  { label: "Agentes IA & automatización", basic: "—", pro: "Básico", ent: "Personalizado" },
-  { label: "Integraciones (HubSpot/WhatsApp)", basic: "—", pro: "✓", ent: "Ilimitadas" },
-  { label: "E-commerce", basic: "Opcional", pro: "✓", ent: "✓" },
-  { label: "Soporte", basic: "Estándar", pro: "Prioritario", ent: "Dedicado + SLA" },
+  {
+    slug: "sipe",
+    name: "Sistema académico tipo SIPE",
+    tagline: "Gestión académica en producción, a la medida de tu institución.",
+    basePriceUSD: 3000,
+    basePriceARS: 3000000,
+    aiAddonUSD: 800,
+    aiAddonARS: 800000,
+    features: ["Panel de alumnos", "Alertas de riesgo de abandono", "Reportes por asesor"],
+  },
 ];
 
 export const CONTACT_EMAIL = "somos@somosastria.com.ar";
