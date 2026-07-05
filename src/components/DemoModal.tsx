@@ -83,14 +83,12 @@ export default function DemoModal({ project, onClose }: DemoModalProps) {
             </span>
           </div>
           <p className="my-5 text-[15px] leading-[1.6] text-[#aeb6c2]">{project.desc}</p>
-          <div className="flex flex-wrap gap-2">
-            {project.tags.map((t) => (
-              <span
-                key={t}
-                className="rounded-lg border border-white/10 bg-white/5 px-[13px] py-1.5 text-xs text-[#bcc4d0]"
-              >
-                {t}
-              </span>
+          <div className="flex flex-col gap-2">
+            {project.benefits.map((b) => (
+              <div key={b} className="flex items-start gap-2 text-[13px] leading-[1.5] text-[#bcc4d0]">
+                <span className="mt-px flex-shrink-0 text-[#9fc0ff]">◇</span>
+                <span>{b}</span>
+              </div>
             ))}
           </div>
         </div>

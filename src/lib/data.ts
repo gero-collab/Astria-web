@@ -118,56 +118,93 @@ export type Project = {
   name: string;
   cat: string;
   desc: string;
-  tags: string[];
+  benefits: string[];
   shots: string[];
   live: string | null;
+  href?: string;
+  ctaLabel?: string;
 };
 
 export const projects: Project[] = [
   {
+    slug: "inmobiliaria-altair",
+    name: "Inmobiliaria Altair",
+    cat: "INMOBILIARIA",
+    desc: "Landing premium para inmobiliarias: catálogo de propiedades, recorrido por barrios y un agente que responde consultas al instante.",
+    benefits: [
+      "Nunca perdés una consulta fuera de horario",
+      "El cliente encuentra su propiedad ideal más rápido",
+      "Menos tiempo perdido con curiosos sin intención real",
+    ],
+    shots: ["Hero con parallax", "Propiedades destacadas", "Formulario de contacto"],
+    live: "/demos/inmobiliaria.html",
+  },
+  {
+    slug: "concesionaria-vega",
+    name: "Concesionaria Vega",
+    cat: "CONCESIONARIA",
+    desc: "Sitio para concesionarias de usados: stock, financiación y un agente que cotiza y agenda test drives solo.",
+    benefits: [
+      "Tu stock siempre visible, las 24 horas",
+      "Financiación calculada al instante, sin esperar al vendedor",
+      "Test drives agendados sin que nadie atienda el teléfono",
+    ],
+    shots: ["Buscador de stock", "Ficha de vehículo", "Cotizador de tasación"],
+    live: "/demos/concesionaria.html",
+  },
+  {
+    slug: "ecommerce-sirius",
+    name: "E-commerce Sirius",
+    cat: "E-COMMERCE",
+    desc: "Tienda online completa con recomendaciones, seguimiento de pedidos y gestión de cambios atendida por un agente.",
+    benefits: [
+      "Atención de postventa sin sumar personal",
+      "Menos carritos abandonados por falta de respuesta",
+      "Tus clientes resuelven dudas al toque, a cualquier hora",
+    ],
+    shots: ["Categorías", "Grilla de productos", "Carrito lateral"],
+    live: "/demos/ecommerce.html",
+  },
+  {
+    slug: "orbi-crm",
+    name: "ORBI CRM",
+    cat: "CRM / GESTIÓN",
+    desc: "CRM tipo SaaS con pipeline visual, reportes en vivo y un copiloto de IA que ejecuta tareas por vos.",
+    benefits: [
+      "Tu equipo de ventas deja de perder oportunidades",
+      "Reportes al día sin armar planillas a mano",
+      "El copiloto hace el trabajo administrativo por vos",
+    ],
+    shots: ["Dashboard de KPIs", "Pipeline Kanban", "Reportes"],
+    live: "/demos/orbi-crm.html",
+  },
+  {
     slug: "sipe",
     name: "SIPE",
     cat: "CRM ACADÉMICO",
-    desc: "Sistema integral de gestión académica y administrativa: paneles en tiempo real, automatizaciones e integraciones con HubSpot y WhatsApp.",
-    tags: ["Next.js", "Supabase", "HubSpot", "WhatsApp API"],
+    desc: "Sistema de gestión académica en producción: alumnos, riesgo de abandono y seguimiento con copiloto de IA integrado.",
+    benefits: [
+      "Detectás alumnos en riesgo antes de que abandonen",
+      "Tus asesores gestionan su cartera sin perder el hilo",
+      "Todo el seguimiento queda registrado automáticamente",
+    ],
     shots: ["Dashboard de gestión", "Panel de alumnos", "Integración WhatsApp"],
     live: null,
+    ctaLabel: "Acceso privado",
   },
   {
-    slug: "prima-terra",
-    name: "Inmobiliaria Prima Terra",
-    cat: "LANDING PREMIUM",
-    desc: "Landing de lujo para inmobiliaria: storytelling visual, catálogo de propiedades y captación de leads con animaciones de alta gama.",
-    tags: ["Next.js", "Framer Motion", "CMS"],
-    shots: ["Hero inmersivo", "Catálogo de propiedades", "Detalle de propiedad"],
+    slug: "agente-ia",
+    name: "Agente IA",
+    cat: "AGENTE DE IA",
+    desc: "El mismo agente que calificás en las demos de arriba, listo para instalarse en tu WhatsApp en días, no meses.",
+    benefits: [
+      "Califica leads mientras vos dormís",
+      "Se adapta al rubro de tu negocio",
+      "Vos solo atendés a los que ya están listos para comprar",
+    ],
+    shots: ["Hero con mockup de chat", "Cómo funciona", "Planes y precios"],
     live: null,
-  },
-  {
-    slug: "concesionaria-2-0",
-    name: "Concesionaria 2.0",
-    cat: "LANDING AUTOMOTRIZ",
-    desc: 'Experiencia tipo "Concesionarias 2.0": showroom digital, configurador visual y agenda de test drives.',
-    tags: ["React", "Tailwind", "Animaciones 3D"],
-    shots: ["Showroom digital", "Ficha de vehículo", "Agenda test drive"],
-    live: null,
-  },
-  {
-    slug: "ecommerce-galactico",
-    name: "E-commerce Galáctico",
-    cat: "TIENDA ONLINE",
-    desc: "Demo de tienda completa: catálogo, carrito, checkout y panel de pedidos con micro-interacciones premium.",
-    tags: ["Next.js", "Stripe", "Supabase"],
-    shots: ["Home de tienda", "Producto + carrito", "Checkout"],
-    live: null,
-  },
-  {
-    slug: "crm-administrativo-contable",
-    name: "CRM Administrativo-Contable",
-    cat: "PANEL DE GESTIÓN",
-    desc: "Panel de gestión financiera: facturación, seguimiento de clientes y reportes con paneles de control en vivo.",
-    tags: ["React", "PostgreSQL", "Dashboards"],
-    shots: ["Panel financiero", "Facturación", "Seguimiento de clientes"],
-    live: null,
+    href: "/agente-ia",
   },
 ];
 

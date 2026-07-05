@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import Reveal from "@/components/Reveal";
 import { projects } from "@/lib/data";
 import DemoModal from "@/components/DemoModal";
@@ -35,16 +36,14 @@ export default function DemosGrid() {
               <div className="flex flex-1 flex-col gap-[14px] p-[22px_22px_24px]">
                 <h3 className="text-[21px] font-semibold">{p.name}</h3>
                 <p className="flex-1 text-sm leading-[1.55] text-[#a7afbb]">{p.desc}</p>
-                <div className="flex flex-wrap gap-[7px]">
-                  {p.tags.map((t) => (
-                    <span
-                      key={t}
-                      className="rounded-[7px] border border-white/[0.09] bg-white/5 px-[11px] py-[5px] text-[11.5px] tracking-[0.03em] text-[#bcc4d0]"
-                    >
-                      {t}
-                    </span>
+                <ul className="flex flex-col gap-[7px]">
+                  {p.benefits.map((b) => (
+                    <li key={b} className="flex items-start gap-[9px] text-[13px] leading-[1.5] text-[#a7afbb]">
+                      <span className="mt-px flex-shrink-0 text-[#9fc0ff]">◇</span>
+                      <span>{b}</span>
+                    </li>
                   ))}
-                </div>
+                </ul>
                 <div className="mt-1.5 flex gap-2.5">
                   <button
                     onClick={() => setModalIndex(i)}
@@ -52,15 +51,30 @@ export default function DemosGrid() {
                   >
                     Ver capturas
                   </button>
-                  <button
-                    disabled={!p.live}
-                    onClick={() => p.live && window.open(p.live, "_blank")}
-                    title={p.live ? "Abrir demo en vivo" : "Demo en vivo próximamente"}
-                    className="flex-1 rounded-[11px] border border-white/[0.14] bg-white/5 py-[11px] text-[13.5px] font-medium disabled:cursor-not-allowed"
-                    style={{ color: p.live ? "#e9ecf1" : "#6b7384", cursor: p.live ? "pointer" : "not-allowed" }}
-                  >
-                    {p.live ? "Ver demo en vivo" : "Demo en vivo · pronto"}
-                  </button>
+                  {p.href ? (
+                    <Link
+                      href={p.href}
+                      className="flex-1 rounded-[11px] border border-white/[0.14] bg-white/5 py-[11px] text-center text-[13.5px] font-medium text-[#e9ecf1]"
+                    >
+                      Ver página →
+                    </Link>
+                  ) : p.live ? (
+                    <button
+                      onClick={() => window.open(p.live!, "_blank")}
+                      title="Abrir demo en vivo"
+                      className="flex-1 rounded-[11px] border border-white/[0.14] bg-white/5 py-[11px] text-[13.5px] font-medium text-[#e9ecf1]"
+                    >
+                      Ver demo en vivo
+                    </button>
+                  ) : (
+                    <button
+                      disabled
+                      title={p.ctaLabel ? "Demo con acceso restringido" : "Demo en vivo próximamente"}
+                      className="flex-1 cursor-not-allowed rounded-[11px] border border-white/[0.14] bg-white/5 py-[11px] text-[13.5px] font-medium text-[#6b7384]"
+                    >
+                      {p.ctaLabel || "Demo en vivo · pronto"}
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
