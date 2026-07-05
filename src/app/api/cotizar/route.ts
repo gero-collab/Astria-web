@@ -11,7 +11,11 @@ const quoteSchema = z.object({
   features: z.array(z.string().trim().max(100)).max(20).optional().default([]),
   budget: z.string().trim().min(1).max(200),
   wantsAI: z.enum(["Sí", "No", "No sé todavía"]),
-  message: z.string().trim().max(5000).optional().default(""),
+  adaptiveAnswers: z
+    .array(z.object({ question: z.string().trim().max(300), answer: z.string().trim().max(500) }))
+    .max(20)
+    .optional()
+    .default([]),
 });
 
 function escapeHtml(input: string) {
@@ -35,7 +39,7 @@ export async function POST(request: Request) {
   if (!parsed.success) {
     return NextResponse.json({ error: "invalid-input" }, { status: 400 });
   }
-  const { name, email, projectType, businessType, features, budget, wantsAI, message } = parsed.data;
+  const { name, email, projectType, businessType, features, budget, wantsAI, adaptiveAnswers } = parsed.data;
 
   const resend = new Resend(apiKey);
 
@@ -54,8 +58,13 @@ export async function POST(request: Request) {
         <p><strong>Funcionalidades deseadas:</strong> ${features.length ? features.map(escapeHtml).join(", ") : "—"}</p>
         <p><strong>Presupuesto aproximado:</strong> ${escapeHtml(budget)}</p>
         <p><strong>¿Quiere Agente IA?:</strong> ${escapeHtml(wantsAI)}</p>
-        <p><strong>Mensaje adicional:</strong></p>
-        <p>${message ? escapeHtml(message).replace(/\n/g, "<br/>") : "—"}</p>
+        ${
+          adaptiveAnswers.length
+            ? `<h3>Detalle según tipo de proyecto</h3>${adaptiveAnswers
+                .map((a) => `<p><strong>${escapeHtml(a.question)}</strong><br/>${escapeHtml(a.answer)}</p>`)
+                .join("")}`
+            : ""
+        }
       `,
     });
 
