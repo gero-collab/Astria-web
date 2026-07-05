@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import Reveal from "@/components/Reveal";
 import { servicios } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "Servicios — ASTRIA",
-  description: "Páginas web, CRM & automatización IA, e-commerce y CRM administrativo-contable.",
+  description: "¿Qué podemos hacer? Sistemas a medida, páginas web premium, e-commerce, CRM administrativo y, si querés sumarlo, un agente de IA.",
 };
 
 export default function ServiciosPage() {
@@ -15,12 +16,12 @@ export default function ServiciosPage() {
       </Reveal>
       <Reveal delay={0.06}>
         <h1 className="my-[14px] max-w-[18ch] text-[clamp(34px,5.5vw,60px)] font-semibold tracking-[-0.02em]">
-          Sistemas que trabajan a la velocidad de tu negocio
+          ¿Qué podemos hacer por vos?
         </h1>
       </Reveal>
       <Reveal delay={0.12}>
         <p className="mb-[54px] max-w-[58ch] text-lg leading-[1.6] text-[#aeb6c2]">
-          Cada servicio es una pieza de ingeniería: diseño premium por fuera, automatización e IA por dentro.
+          Diseñamos y desarrollamos el sistema que tu negocio necesita, de punta a punta. Elegí el punto de partida.
         </p>
       </Reveal>
 
@@ -47,6 +48,14 @@ export default function ServiciosPage() {
                     </span>
                   ))}
                 </div>
+                {s.href && (
+                  <Link
+                    href={s.href}
+                    className="mt-[18px] inline-flex items-center gap-2 text-sm font-semibold text-[#9fc0ff] hover:text-[#c3d2f0]"
+                  >
+                    {s.ctaLabel ?? "Conocé más"} →
+                  </Link>
+                )}
               </div>
             </div>
           </Reveal>

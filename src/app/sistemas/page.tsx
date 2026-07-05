@@ -3,11 +3,11 @@ import Reveal from "@/components/Reveal";
 import DemosGrid from "@/components/DemosGrid";
 
 export const metadata: Metadata = {
-  title: "Demos — ASTRIA",
-  description: "Casos reales en órbita: SIPE, Prima Terra, Concesionaria 2.0, E-commerce Galáctico y más.",
+  title: "Productos & Sistemas — ASTRIA",
+  description: "Casos reales en órbita: SIPE, Inmobiliaria Altair, Concesionaria Vega, E-commerce Sirius, ORBI CRM y más.",
 };
 
-export default function DemosPage() {
+export default function SistemasPage() {
   return (
     <div className="mx-auto max-w-[1200px] px-[clamp(20px,5vw,40px)] pb-[100px] pt-[clamp(50px,8vh,90px)]">
       <Reveal>
@@ -15,7 +15,7 @@ export default function DemosPage() {
       </Reveal>
       <Reveal delay={0.06}>
         <h1 className="my-[14px] max-w-[16ch] text-[clamp(34px,5.5vw,60px)] font-semibold tracking-[-0.02em]">
-          Demos &amp; proyectos reales
+          Productos &amp; Sistemas
         </h1>
       </Reveal>
       <Reveal delay={0.12}>

@@ -38,8 +38,8 @@ export default function DemoDetailPage({ params }: PageProps) {
   return (
     <div className="mx-auto max-w-[1000px] px-[clamp(20px,5vw,32px)] pb-[110px] pt-[clamp(50px,8vh,90px)]">
       <Reveal>
-        <Link href="/demos" className="mb-8 flex w-fit items-center gap-2 text-sm text-[#8fa0c4] hover:text-[#c3d2f0]">
-          ← Volver a demos
+        <Link href="/sistemas" className="mb-8 flex w-fit items-center gap-2 text-sm text-[#8fa0c4] hover:text-[#c3d2f0]">
+          ← Volver a sistemas
         </Link>
       </Reveal>
 

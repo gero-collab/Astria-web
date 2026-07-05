@@ -6,7 +6,7 @@ export type NavItem = {
 export const navItems: NavItem[] = [
   { label: "Home", href: "/" },
   { label: "Servicios", href: "/servicios" },
-  { label: "Demos", href: "/demos" },
+  { label: "Sistemas", href: "/sistemas" },
   { label: "Agente IA", href: "/agente-ia" },
   { label: "Precios", href: "/precios" },
   { label: "Contacto", href: "/contacto" },
@@ -42,12 +42,12 @@ export const homeServices: HomeService[] = [
     label: "Demos en vivo",
     desc: "Probá nuestros sistemas reales antes de decidir. Sin promesas vacías.",
     benefit: "Ves el resultado antes de invertir",
-    href: "/demos",
+    href: "/sistemas",
   },
 ];
 
 export type WhyItem = {
-  icon: "bolt" | "ai" | "design" | "sat";
+  icon: "bolt" | "code" | "design" | "sat";
   tilt: string;
   title: string;
   desc: string;
@@ -61,10 +61,10 @@ export const why: WhyItem[] = [
     desc: "De la idea al sistema en producción en semanas, no meses.",
   },
   {
-    icon: "ai",
+    icon: "code",
     tilt: "-24deg",
-    title: "IA integrada desde el día uno",
-    desc: "Cada sistema que construimos puede incorporar agentes IA, automatizaciones y dashboards inteligentes.",
+    title: "Código limpio y escalable",
+    desc: "Sistemas que crecen con tu negocio sin reescribir todo desde cero.",
   },
   {
     icon: "design",
@@ -85,32 +85,42 @@ export type Servicio = {
   title: string;
   desc: string;
   bullets: string[];
+  href?: string;
+  ctaLabel?: string;
 };
 
 export const servicios: Servicio[] = [
   {
     glyph: "01",
-    title: "Páginas Web",
-    desc: "Landings de lujo, sitios para inmobiliarias y concesionarias. Diseño cinematográfico, scroll reveals y carga ultra-rápida que convierte visitantes en clientes.",
-    bullets: ["Landings premium", "Inmobiliarias", "Concesionarias 2.0", "SEO técnico"],
+    title: "Sistemas a medida",
+    desc: "Software hecho a medida para tu operación: paneles de gestión, automatizaciones y herramientas internas que se adaptan a cómo trabajás vos, no al revés.",
+    bullets: ["Paneles de gestión", "Automatizaciones", "Integraciones a medida", "Herramientas internas"],
   },
   {
     glyph: "02",
-    title: "CRM & Automatización IA",
-    desc: "Sistemas tipo SIPE: gestión académica y administrativa, paneles en tiempo real, agentes de IA e integraciones con HubSpot y WhatsApp para que nada se te escape.",
-    bullets: ["Paneles en vivo", "Agentes IA", "HubSpot", "WhatsApp API", "Integraciones"],
+    title: "Páginas web premium",
+    desc: "Landings de lujo, sitios para inmobiliarias, concesionarias y otros rubros. Diseño cinematográfico, scroll reveals y carga ultra-rápida que convierte visitantes en clientes.",
+    bullets: ["Landings premium", "Inmobiliarias", "Concesionarias", "SEO técnico"],
   },
   {
     glyph: "03",
-    title: "E-commerce Galáctico",
+    title: "E-commerce",
     desc: "Tiendas online completas: catálogo, carrito, checkout y panel de pedidos. Experiencia de compra premium pensada para escalar tu facturación.",
     bullets: ["Catálogo", "Checkout", "Pasarelas de pago", "Panel de pedidos"],
   },
   {
     glyph: "04",
-    title: "CRM Administrativo-Contable",
+    title: "CRM administrativo",
     desc: "Facturación, seguimiento de clientes y paneles financieros en un solo lugar. Control total de tu operación con reportes claros y en tiempo real.",
     bullets: ["Facturación", "Seguimiento de clientes", "Paneles financieros", "Reportes"],
+  },
+  {
+    glyph: "05",
+    title: "Agente IA (upsell opcional)",
+    desc: "Un agente que responde en tu WhatsApp, califica leads y atiende consultas las 24 horas. Se suma como módulo opcional a cualquiera de los sistemas de arriba — no viene incluido por defecto.",
+    bullets: ["Calificación de leads", "Atención 24/7", "Integración a WhatsApp", "Módulo opcional"],
+    href: "/agente-ia",
+    ctaLabel: "Conocé el Agente IA",
   },
 ];
 

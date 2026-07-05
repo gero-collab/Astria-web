@@ -1,11 +1,11 @@
 import Link from "next/link";
 import Reveal from "@/components/Reveal";
-import { AiIcon, BoltIcon, DesignIcon, SatIcon } from "@/components/Icons";
+import { BoltIcon, CodeIcon, DesignIcon, SatIcon } from "@/components/Icons";
 import { homeServices, why, type WhyItem } from "@/lib/data";
 
 const whyIcons: Record<WhyItem["icon"], typeof BoltIcon> = {
   bolt: BoltIcon,
-  ai: AiIcon,
+  code: CodeIcon,
   design: DesignIcon,
   sat: SatIcon,
 };
@@ -40,11 +40,11 @@ export default function HomePage() {
         </Reveal>
         <Reveal delay={0.18}>
           <div className="flex flex-wrap justify-center gap-4">
-            <Link href="/demos" className="btn-gold">
-              Ver demos en vivo
+            <Link href="/servicios" className="btn-gold">
+              Creamos tu sistema
             </Link>
-            <Link href="/precios" className="btn-ghost">
-              Ver planes
+            <Link href="/sistemas" className="btn-ghost">
+              Elegí uno de nuestros sistemas
             </Link>
           </div>
         </Reveal>
@@ -149,7 +149,7 @@ export default function HomePage() {
                 Cotizar mi proyecto
               </Link>
               <Link
-                href="/demos"
+                href="/sistemas"
                 className="cursor-pointer rounded-[13px] border border-white/[0.18] bg-white/[0.06] px-8 py-[15px] text-[15.5px] font-medium text-[#e9ecf1]"
               >
                 Explorar demos

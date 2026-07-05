@@ -34,19 +34,6 @@ export function BoltIcon() {
   );
 }
 
-export function AiIcon() {
-  const uid = useId();
-  return (
-    <svg {...strokeProps} stroke={`url(#${uid})`}>
-      <ChromeDefs id={uid} />
-      <circle cx="12" cy="12" r="3.1" fill={`url(#${uid})`} fillOpacity={0.22} />
-      <ellipse cx="12" cy="12" rx="9.5" ry="4" transform="rotate(28 12 12)" />
-      <circle cx="20.4" cy="8.6" r="1.15" fill={`url(#${uid})`} />
-      <circle cx="3.6" cy="15.4" r="1.15" fill={`url(#${uid})`} />
-    </svg>
-  );
-}
-
 export function DesignIcon() {
   const uid = useId();
   return (
@@ -67,6 +54,18 @@ export function SatIcon() {
       <rect x="9" y="9" width="6" height="6" rx="1" transform="rotate(45 12 12)" fill={`url(#${uid})`} fillOpacity={0.2} />
       <path d="M6.5 6.5 3 3M17.5 6.5 21 3M6.5 17.5 3 21M17.5 17.5 21 21" />
       <circle cx="12" cy="12" r="1.4" fill={`url(#${uid})`} />
+    </svg>
+  );
+}
+
+export function CodeIcon() {
+  const uid = useId();
+  return (
+    <svg {...strokeProps} stroke={`url(#${uid})`}>
+      <ChromeDefs id={uid} />
+      <path d="M8.5 8 4 12l4.5 4" />
+      <path d="M15.5 8 20 12l-4.5 4" />
+      <path d="M13.2 5.5 10.8 18.5" fill={`url(#${uid})`} fillOpacity={0.16} />
     </svg>
   );
 }

@@ -57,7 +57,7 @@ export default function DemosGrid() {
               <div className="mt-1.5 flex gap-2.5">
                 {detailSlugs.has(p.slug) && (
                   <Link
-                    href={`/demos/${p.slug}`}
+                    href={`/sistemas/${p.slug}`}
                     className="flex-1 rounded-[11px] border border-white/[0.14] bg-white/5 py-[11px] text-center text-[13.5px] font-medium text-[#e9ecf1]"
                   >
                     Conocé más
