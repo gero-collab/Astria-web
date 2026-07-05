@@ -11,6 +11,8 @@ const config: Config = {
       fontFamily: {
         sora: ["var(--font-sora)", "sans-serif"],
         chakra: ["var(--font-chakra)", "sans-serif"],
+        urbanist: ["var(--font-urbanist)", "sans-serif"],
+        "agente-inter": ["var(--font-agente-inter)", "sans-serif"],
       },
       keyframes: {
         spin360: { to: { transform: "rotate(360deg)" } },
