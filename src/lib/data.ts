@@ -120,7 +120,6 @@ export type Project = {
   cat: string;
   desc: string;
   benefits: string[];
-  shots: string[];
   thumbnail?: string;
   live: string | null;
   href?: string;
@@ -138,7 +137,6 @@ export const projects: Project[] = [
       "El cliente encuentra su propiedad ideal más rápido",
       "Menos tiempo perdido con curiosos sin intención real",
     ],
-    shots: ["Hero con parallax", "Propiedades destacadas", "Formulario de contacto"],
     thumbnail: "/images/demo-thumbs/inmobiliaria.png",
     live: "/demos/inmobiliaria.html",
   },
@@ -152,7 +150,6 @@ export const projects: Project[] = [
       "Financiación calculada al instante, sin esperar al vendedor",
       "Test drives agendados sin que nadie atienda el teléfono",
     ],
-    shots: ["Buscador de stock", "Ficha de vehículo", "Cotizador de tasación"],
     thumbnail: "/images/demo-thumbs/concesionaria.png",
     live: "/demos/concesionaria.html",
   },
@@ -166,7 +163,6 @@ export const projects: Project[] = [
       "Menos carritos abandonados por falta de respuesta",
       "Tus clientes resuelven dudas al toque, a cualquier hora",
     ],
-    shots: ["Categorías", "Grilla de productos", "Carrito lateral"],
     thumbnail: "/images/demo-thumbs/ecommerce.png",
     live: "/demos/ecommerce.html",
   },
@@ -180,7 +176,6 @@ export const projects: Project[] = [
       "Reportes al día sin armar planillas a mano",
       "El copiloto hace el trabajo administrativo por vos",
     ],
-    shots: ["Dashboard de KPIs", "Pipeline Kanban", "Reportes"],
     thumbnail: "/images/demo-thumbs/orbi-crm.png",
     live: "/demos/orbi-crm.html",
   },
@@ -194,7 +189,6 @@ export const projects: Project[] = [
       "Tus asesores gestionan su cartera sin perder el hilo",
       "Todo el seguimiento queda registrado automáticamente",
     ],
-    shots: ["Dashboard de gestión", "Panel de alumnos", "Integración WhatsApp"],
     live: null,
     ctaLabel: "Acceso privado",
   },
@@ -208,7 +202,6 @@ export const projects: Project[] = [
       "Se adapta al rubro de tu negocio",
       "Vos solo atendés a los que ya están listos para comprar",
     ],
-    shots: ["Hero con mockup de chat", "Cómo funciona", "Planes y precios"],
     live: null,
     href: "/agente-ia",
   },
