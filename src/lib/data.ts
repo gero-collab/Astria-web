@@ -207,6 +207,113 @@ export const projects: Project[] = [
   },
 ];
 
+export type DemoDetail = {
+  slug: string;
+  who: string;
+  developmentIncludes: string[];
+  aiIntro: string;
+  aiItems: string[];
+};
+
+export const demoDetails: DemoDetail[] = [
+  {
+    slug: "inmobiliaria-altair",
+    who: "Landing premium pensada para inmobiliarias y agentes que venden o alquilan propiedades de alto valor. Ideal para equipos que quieren un sitio propio y confiable, sin depender solo de portales genéricos.",
+    developmentIncludes: [
+      "Diseño a medida con la identidad de tu marca",
+      "Catálogo de propiedades con filtros por zona, precio y tipo",
+      "Fichas de propiedad con galería de fotos e info clave",
+      "Formulario de contacto y tasación",
+      "Sitio optimizado para velocidad y SEO",
+      "Hosting y dominio configurados",
+    ],
+    aiIntro:
+      "El mismo agente que probás en la demo de Agente IA puede vivir directamente en el WhatsApp de tu inmobiliaria:",
+    aiItems: [
+      "Responde consultas sobre propiedades al instante, las 24 horas",
+      "Agenda visitas y las confirma solo en tu calendario",
+      "Califica leads según presupuesto y urgencia antes de pasarlos a un asesor",
+      "Hace seguimiento a los que \"lo están pensando\" sin que nadie tenga que acordarse",
+    ],
+  },
+  {
+    slug: "concesionaria-vega",
+    who: "Sitio pensado para concesionarias de autos usados o 0km que necesitan mostrar su stock actualizado, calcular financiación al instante y captar gente que quiere vender su auto.",
+    developmentIncludes: [
+      "Buscador de stock con filtros por marca, modelo, año y presupuesto",
+      "Ficha de vehículo con fotos y ficha técnica",
+      "Simulador de financiación",
+      "Formulario \"vendé tu auto\"",
+      "Sección de oportunidades y ofertas",
+      "Integración con el WhatsApp de ventas",
+    ],
+    aiIntro: "El agente de IA puede atender tu concesionaria desde el primer mensaje:",
+    aiItems: [
+      "Cotiza vehículos y calcula financiación en el momento",
+      "Agenda test drives y los confirma sin intervención humana",
+      "Califica interesados según qué auto buscan y su presupuesto",
+      "Hace seguimiento post-test drive para ayudar a cerrar la venta",
+    ],
+  },
+  {
+    slug: "ecommerce-sirius",
+    who: "Tienda online completa para marcas que quieren vender directo al consumidor con una experiencia de compra premium, sin las limitaciones de un marketplace.",
+    developmentIncludes: [
+      "Catálogo de productos con categorías y filtros",
+      "Carrito y checkout optimizados para conversión",
+      "Fichas de producto con galería y variantes (talle, color)",
+      "Gestión de envíos y devoluciones",
+      "Panel de pedidos",
+      "Integración con medios de pago",
+    ],
+    aiIntro: "El agente de IA puede atender a tus compradores en cada etapa de la compra:",
+    aiItems: [
+      "Recomienda productos según lo que el cliente está buscando",
+      "Rastrea pedidos y responde \"¿dónde está mi pedido?\" al instante",
+      "Atiende cambios y devoluciones sin que un humano tenga que intervenir",
+      "Recupera carritos abandonados con un mensaje personalizado",
+    ],
+  },
+  {
+    slug: "orbi-crm",
+    who: "CRM tipo SaaS para equipos de ventas que necesitan un pipeline visual, reportes en vivo y dejar de perder oportunidades en planillas sueltas.",
+    developmentIncludes: [
+      "Dashboard de KPIs de ventas",
+      "Pipeline visual tipo Kanban",
+      "Gestión de clientes y contactos",
+      "Reportes automáticos",
+      "Tareas y recordatorios",
+      "Permisos por usuario y equipo",
+    ],
+    aiIntro: "Un copiloto de IA integrado al CRM que hace el trabajo administrativo por tu equipo:",
+    aiItems: [
+      "Crea tareas de seguimiento automáticamente según la actividad del cliente",
+      "Resume el historial de un cliente en segundos, antes de una llamada",
+      "Alerta vencimientos de facturas o negocios por cerrar",
+      "Redacta borradores de mails o mensajes de seguimiento",
+    ],
+  },
+  {
+    slug: "sipe",
+    who: "Sistema de gestión académica en producción, para institutos y academias que necesitan seguir a cientos de alumnos activos y detectar riesgo de abandono a tiempo.",
+    developmentIncludes: [
+      "Dashboard de gestión académica",
+      "Panel de alumnos con historial y estado",
+      "Alertas de riesgo de abandono",
+      "Integración con WhatsApp para seguimiento",
+      "Reportes por asesor y por cohorte",
+      "Acceso por roles (admin, asesor)",
+    ],
+    aiIntro: "El agente de IA se integra al seguimiento de alumnos de SIPE:",
+    aiItems: [
+      "Detecta señales tempranas de abandono en la conversación con el alumno",
+      "Responde consultas frecuentes (fechas, requisitos, pagos)",
+      "Resume el estado de cada alumno para el asesor antes de contactarlo",
+      "Alerta vencimientos de pagos o entregas pendientes",
+    ],
+  },
+];
+
 export type Plan = {
   name: string;
   tagline: string;

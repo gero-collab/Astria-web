@@ -3,7 +3,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import Reveal from "@/components/Reveal";
-import { projects } from "@/lib/data";
+import { demoDetails, projects } from "@/lib/data";
+
+const detailSlugs = new Set(demoDetails.map((d) => d.slug));
 
 export default function DemosGrid() {
   return (
@@ -53,6 +55,14 @@ export default function DemosGrid() {
                 ))}
               </ul>
               <div className="mt-1.5 flex gap-2.5">
+                {detailSlugs.has(p.slug) && (
+                  <Link
+                    href={`/demos/${p.slug}`}
+                    className="flex-1 rounded-[11px] border border-white/[0.14] bg-white/5 py-[11px] text-center text-[13.5px] font-medium text-[#e9ecf1]"
+                  >
+                    Conocé más
+                  </Link>
+                )}
                 {p.href ? (
                   <Link
                     href={p.href}
