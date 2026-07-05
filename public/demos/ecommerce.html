@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ASTRIA Demo · E-commerce</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --white:#FFFFFF;
+  --off:#FAFAF8;
+  --sand:#F3EFE9;
+  --ink:#111110;
+  --ink-soft:#3D3C3A;
+  --muted:#8A8780;
+  --muted-light:#C4C2BD;
+  --border:#E8E4DE;
+  --accent:#1A1A18;
+  --green:#166534;
+  --green-bg:#F0FDF4;
+  --red:#DC2626;
+  --radius:10px;
+  --shadow:0 1px 3px rgba(0,0,0,0.06),0 4px 12px rgba(0,0,0,0.04);
+  --shadow-md:0 4px 16px rgba(0,0,0,0.08),0 12px 32px rgba(0,0,0,0.05);
+}
+html{scroll-behavior:smooth;}
+body{background:var(--white);color:var(--ink);font-family:'DM Sans',sans-serif;overflow-x:hidden;}
+
+/* ── ANNOUNCEMENT BAR ── */
+.announce{
+  background:var(--ink);color:rgba(255,255,255,0.85);
+  text-align:center;padding:10px 20px;
+  font-size:13px;font-weight:500;letter-spacing:.2px;
+}
+.announce span{color:var(--white);font-weight:700;}
+
+/* ── NAV ── */
+nav{
+  background:var(--white);border-bottom:1px solid var(--border);
+  position:sticky;top:0;z-index:300;
+}
+.nav-top{
+  display:flex;align-items:center;padding:0 48px;height:60px;
+  gap:40px;
+}
+.nav-logo{
+  font-family:'DM Serif Display',serif;font-size:26px;letter-spacing:1px;
+  color:var(--ink);text-decoration:none;flex-shrink:0;
+}
+.nav-links{display:flex;gap:2px;flex:1;}
+.nav-link{
+  padding:8px 14px;font-size:13px;font-weight:500;color:var(--ink-soft);
+  text-decoration:none;border-radius:6px;transition:all .15s;
+}
+.nav-link:hover{color:var(--ink);background:var(--off);}
+.nav-right{display:flex;align-items:center;gap:4px;margin-left:auto;}
+.nav-icon-btn{
+  width:38px;height:38px;display:flex;align-items:center;justify-content:center;
+  border-radius:8px;border:none;background:transparent;cursor:pointer;color:var(--ink-soft);
+  transition:background .15s;position:relative;
+}
+.nav-icon-btn:hover{background:var(--off);}
+.nav-icon-btn svg{width:20px;height:20px;}
+.cart-count{
+  position:absolute;top:4px;right:4px;
+  width:16px;height:16px;background:var(--ink);color:var(--white);
+  border-radius:50%;font-size:9px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+}
+.nav-search-box{
+  flex:1;max-width:320px;display:flex;align-items:center;
+  background:var(--off);border:1px solid var(--border);border-radius:8px;
+  padding:8px 14px;gap:8px;
+}
+.nav-search-box input{border:none;background:transparent;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);outline:none;width:100%;}
+.nav-search-box input::placeholder{color:var(--muted);}
+.nav-search-box svg{width:16px;height:16px;color:var(--muted);flex-shrink:0;}
+
+/* ── HERO SPLIT ── */
+.hero{display:grid;grid-template-columns:1fr 1fr;min-height:580px;}
+.hero-left{
+  background:var(--sand);display:flex;flex-direction:column;
+  justify-content:center;padding:80px 72px;
+}
+.hero-tag{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--white);border:1px solid var(--border);
+  font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;
+  color:var(--muted);padding:6px 14px;border-radius:100px;
+  margin-bottom:28px;width:fit-content;
+}
+.hero-tag-dot{width:6px;height:6px;border-radius:50%;background:#22C55E;}
+.hero h1{
+  font-family:'DM Serif Display',serif;
+  font-size:clamp(48px,5vw,72px);line-height:1.0;
+  letter-spacing:-.5px;margin-bottom:20px;
+  color:var(--ink);
+}
+.hero h1 em{font-style:italic;color:var(--muted);}
+.hero-sub{font-size:16px;line-height:1.7;color:var(--muted);margin-bottom:36px;max-width:400px;}
+.hero-actions{display:flex;gap:10px;margin-bottom:48px;}
+.btn-dark{
+  padding:14px 28px;background:var(--ink);color:var(--white);
+  font-size:13px;font-weight:600;border-radius:8px;border:none;cursor:pointer;
+  font-family:'DM Sans',sans-serif;transition:opacity .15s;text-decoration:none;display:inline-block;
+}
+.btn-dark:hover{opacity:.85;}
+.btn-light{
+  padding:14px 28px;border:1.5px solid var(--border);color:var(--ink-soft);
+  font-size:13px;font-weight:600;border-radius:8px;background:var(--white);cursor:pointer;
+  font-family:'DM Sans',sans-serif;transition:border-color .15s;text-decoration:none;display:inline-block;
+}
+.btn-light:hover{border-color:var(--ink);}
+.hero-social{display:flex;align-items:center;gap:16px;font-size:12px;color:var(--muted);}
+.hero-social-num{font-family:'DM Serif Display',serif;font-size:22px;color:var(--ink);}
+.hero-right{
+  position:relative;overflow:hidden;
+  background:var(--ink);
+}
+.hero-right img{width:100%;height:100%;object-fit:cover;opacity:.88;}
+.hero-right-badge{
+  position:absolute;bottom:32px;left:32px;
+  background:rgba(255,255,255,0.95);border-radius:10px;
+  padding:16px 20px;
+  box-shadow:0 4px 20px rgba(0,0,0,0.15);
+}
+.hrb-label{font-size:10px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;}
+.hrb-name{font-size:15px;font-weight:700;color:var(--ink);margin-bottom:2px;}
+.hrb-price{font-size:18px;font-weight:800;color:var(--ink);}
+.hrb-cta{
+  margin-top:12px;width:100%;padding:9px;background:var(--ink);color:var(--white);
+  border:none;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;
+  font-family:'DM Sans',sans-serif;
+}
+
+/* ── TRUST BAR ── */
+.trust-bar{
+  background:var(--off);border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  display:grid;grid-template-columns:repeat(4,1fr);
+}
+.trust-item{
+  padding:20px 24px;display:flex;align-items:center;gap:14px;
+  border-right:1px solid var(--border);
+}
+.trust-item:last-child{border-right:none;}
+.trust-icon{width:36px;height:36px;background:var(--white);border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.trust-icon svg{width:18px;height:18px;}
+.trust-text{}
+.trust-title{font-size:13px;font-weight:700;color:var(--ink);}
+.trust-sub{font-size:11px;color:var(--muted);margin-top:1px;}
+
+/* ── CATEGORIES ── */
+.cats-section{padding:64px 48px;}
+.sec-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:32px;}
+.sec-title{font-family:'DM Serif Display',serif;font-size:36px;color:var(--ink);letter-spacing:-.3px;}
+.sec-title em{font-style:italic;}
+.sec-link{font-size:13px;font-weight:600;color:var(--muted);text-decoration:none;border-bottom:1px solid var(--border);padding-bottom:2px;transition:color .15s,border-color .15s;}
+.sec-link:hover{color:var(--ink);border-color:var(--ink);}
+.cats-grid{display:grid;grid-template-columns:2fr 1fr 1fr;grid-template-rows:1fr 1fr;gap:12px;height:480px;}
+.cat-card{position:relative;overflow:hidden;cursor:pointer;border-radius:var(--radius);}
+.cat-card.large{grid-row:span 2;}
+.cat-card img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease,filter .3s;}
+.cat-card:hover img{transform:scale(1.04);filter:brightness(.9);}
+.cat-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(180deg,transparent 40%,rgba(17,17,16,0.65) 100%);
+  transition:opacity .3s;
+}
+.cat-card:hover .cat-overlay{opacity:.5;}
+.cat-info{
+  position:absolute;bottom:0;left:0;right:0;
+  padding:22px 24px;
+}
+.cat-name{font-size:19px;font-weight:700;color:var(--white);margin-bottom:4px;}
+.cat-card.small .cat-name{font-size:16px;}
+.cat-count{font-size:12px;color:rgba(255,255,255,0.65);font-weight:500;}
+.cat-cta{
+  display:inline-flex;align-items:center;gap:6px;
+  margin-top:10px;padding:8px 16px;
+  background:rgba(255,255,255,0.15);backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,0.2);border-radius:6px;
+  font-size:12px;font-weight:600;color:var(--white);
+  opacity:0;transform:translateY(4px);transition:all .25s;
+}
+.cat-card:hover .cat-cta{opacity:1;transform:translateY(0);}
+
+/* ── PRODUCTS ── */
+.products-section{background:var(--off);padding:64px 48px;border-top:1px solid var(--border);}
+.products-filters{display:flex;gap:6px;margin-bottom:36px;}
+.pf-btn{
+  padding:8px 18px;border:1.5px solid var(--border);border-radius:100px;
+  font-size:13px;font-weight:500;color:var(--muted);background:var(--white);
+  cursor:pointer;transition:all .15s;font-family:'DM Sans',sans-serif;
+}
+.pf-btn.active,.pf-btn:hover{border-color:var(--ink);color:var(--ink);background:var(--white);}
+.pf-btn.active{background:var(--ink);color:var(--white);border-color:var(--ink);}
+.products-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
+
+/* PRODUCT CARD */
+.prod-card{background:var(--white);border-radius:var(--radius);overflow:hidden;cursor:pointer;border:1px solid var(--border);transition:box-shadow .2s,transform .2s;}
+.prod-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);}
+.prod-img{position:relative;aspect-ratio:4/3;overflow:hidden;background:var(--sand);}
+.prod-img img{width:100%;height:100%;object-fit:cover;transition:transform .4s;}
+.prod-card:hover .prod-img img{transform:scale(1.05);}
+.prod-img-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;}
+.prod-badge{
+  position:absolute;top:10px;left:10px;
+  padding:3px 10px;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;
+}
+.pb-new{background:var(--ink);color:var(--white);}
+.pb-sale{background:#DC2626;color:var(--white);}
+.pb-best{background:#92400E;color:var(--white);}
+.prod-fav{
+  position:absolute;top:10px;right:10px;
+  width:32px;height:32px;background:var(--white);border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:var(--shadow);cursor:pointer;
+  opacity:0;transition:opacity .2s;
+}
+.prod-card:hover .prod-fav{opacity:1;}
+.prod-fav svg{width:16px;height:16px;}
+.quick-add{
+  position:absolute;bottom:0;left:0;right:0;
+  padding:12px;background:var(--ink);color:var(--white);
+  font-size:12px;font-weight:700;text-align:center;letter-spacing:.5px;text-transform:uppercase;
+  transform:translateY(100%);transition:transform .25s;cursor:pointer;
+  border:none;font-family:'DM Sans',sans-serif;
+}
+.prod-card:hover .quick-add{transform:translateY(0);}
+.prod-body{padding:14px 16px;}
+.prod-cat{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted-light);margin-bottom:4px;}
+.prod-name{font-size:15px;font-weight:600;color:var(--ink);margin-bottom:4px;line-height:1.3;}
+.prod-rating{display:flex;align-items:center;gap:6px;margin-bottom:10px;}
+.stars{display:flex;gap:1px;}
+.star{width:12px;height:12px;}
+.prod-rating-num{font-size:11px;color:var(--muted);}
+.prod-price-row{display:flex;align-items:baseline;gap:8px;}
+.prod-price{font-size:18px;font-weight:800;color:var(--ink);}
+.prod-price-old{font-size:13px;color:var(--muted-light);text-decoration:line-through;}
+.prod-price-save{font-size:11px;font-weight:700;color:#DC2626;}
+
+/* ── BANNER FULL ── */
+.banner-section{position:relative;height:420px;overflow:hidden;}
+.banner-section img{width:100%;height:100%;object-fit:cover;filter:brightness(.65);}
+.banner-content{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;text-align:center;padding:40px;
+}
+.banner-tag{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.7);margin-bottom:16px;}
+.banner-title{font-family:'DM Serif Display',serif;font-size:clamp(40px,5vw,64px);color:var(--white);letter-spacing:-.5px;line-height:1.05;margin-bottom:20px;}
+.banner-title em{font-style:italic;}
+.banner-sub{font-size:16px;color:rgba(255,255,255,.7);margin-bottom:32px;max-width:500px;}
+.btn-white{
+  padding:14px 32px;background:var(--white);color:var(--ink);
+  font-size:13px;font-weight:700;border-radius:8px;border:none;cursor:pointer;
+  font-family:'DM Sans',sans-serif;transition:opacity .15s;text-decoration:none;display:inline-block;
+}
+.btn-white:hover{opacity:.9;}
+
+/* ── REVIEWS ── */
+.reviews-section{padding:64px 48px;background:var(--white);}
+.reviews-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:40px;}
+.review-card{background:var(--off);border:1px solid var(--border);border-radius:var(--radius);padding:24px;}
+.rev-stars{display:flex;gap:2px;margin-bottom:14px;}
+.rev-text{font-size:14px;line-height:1.7;color:var(--ink-soft);margin-bottom:16px;font-style:italic;}
+.rev-author{display:flex;align-items:center;gap:12px;padding-top:16px;border-top:1px solid var(--border);}
+.rev-avatar{width:36px;height:36px;border-radius:50%;font-family:'DM Serif Display',serif;font-size:14px;color:var(--white);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.rev-name{font-size:13px;font-weight:700;color:var(--ink);}
+.rev-product{font-size:11px;color:var(--muted);}
+.rev-verified{font-size:10px;color:var(--green);font-weight:600;display:flex;align-items:center;gap:3px;margin-top:2px;}
+
+/* ── NEWSLETTER ── */
+.newsletter{background:var(--sand);padding:72px 48px;text-align:center;border-top:1px solid var(--border);}
+.nl-title{font-family:'DM Serif Display',serif;font-size:40px;color:var(--ink);letter-spacing:-.3px;margin-bottom:10px;}
+.nl-sub{font-size:15px;color:var(--muted);margin-bottom:32px;}
+.nl-form{display:flex;gap:0;max-width:440px;margin:0 auto;}
+.nl-input{
+  flex:1;padding:14px 20px;border:1.5px solid var(--border);border-right:none;
+  font-family:'DM Sans',sans-serif;font-size:14px;color:var(--ink);
+  background:var(--white);outline:none;border-radius:8px 0 0 8px;
+  transition:border-color .15s;
+}
+.nl-input:focus{border-color:var(--ink);}
+.nl-input::placeholder{color:var(--muted);}
+.nl-btn{
+  padding:14px 24px;background:var(--ink);color:var(--white);
+  font-size:13px;font-weight:700;border:none;cursor:pointer;
+  font-family:'DM Sans',sans-serif;border-radius:0 8px 8px 0;transition:opacity .15s;
+}
+.nl-btn:hover{opacity:.85;}
+.nl-note{font-size:11px;color:var(--muted-light);margin-top:12px;}
+
+/* ── FOOTER ── */
+footer{background:var(--ink);color:var(--white);padding:56px 48px 28px;}
+.footer-top{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px;padding-bottom:48px;border-bottom:1px solid rgba(255,255,255,0.08);}
+.footer-logo{font-family:'DM Serif Display',serif;font-size:24px;margin-bottom:12px;display:block;}
+.footer-desc{font-size:13px;color:rgba(255,255,255,.4);line-height:1.7;max-width:260px;}
+.footer-col-label{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:16px;}
+.footer-links{display:flex;flex-direction:column;gap:9px;}
+.footer-links a{font-size:13px;color:rgba(255,255,255,.5);text-decoration:none;transition:color .15s;}
+.footer-links a:hover{color:var(--white);}
+.footer-bottom{display:flex;justify-content:space-between;font-size:12px;color:rgba(255,255,255,.25);}
+.footer-bottom span{color:rgba(255,255,255,.4);}
+
+/* CART DRAWER */
+.cart-overlay{position:fixed;inset:0;background:rgba(0,0,0,0);z-index:400;pointer-events:none;transition:background .3s;}
+.cart-overlay.open{background:rgba(0,0,0,0.4);pointer-events:all;}
+.cart-drawer{
+  position:fixed;top:0;right:-420px;width:420px;height:100%;
+  background:var(--white);z-index:401;
+  box-shadow:-4px 0 40px rgba(0,0,0,0.1);
+  transition:right .35s cubic-bezier(.25,.46,.45,.94);
+  display:flex;flex-direction:column;
+}
+.cart-drawer.open{right:0;}
+.cart-head{padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.cart-title{font-size:17px;font-weight:700;}
+.cart-close{width:32px;height:32px;border:none;background:var(--off);border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.cart-close svg{width:16px;height:16px;}
+.cart-body{flex:1;overflow-y:auto;padding:20px 24px;}
+.cart-item{display:flex;gap:14px;padding:16px 0;border-bottom:1px solid var(--border);}
+.cart-item-img{width:72px;height:72px;border-radius:8px;overflow:hidden;background:var(--sand);flex-shrink:0;}
+.cart-item-img img{width:100%;height:100%;object-fit:cover;}
+.cart-item-info{flex:1;}
+.cart-item-name{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:3px;}
+.cart-item-variant{font-size:12px;color:var(--muted);}
+.cart-item-price{font-size:15px;font-weight:700;color:var(--ink);margin-top:6px;}
+.cart-item-qty{display:flex;align-items:center;gap:10px;margin-top:8px;}
+.qty-btn{width:26px;height:26px;border:1.5px solid var(--border);border-radius:6px;background:var(--white);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--ink);}
+.qty-num{font-size:14px;font-weight:600;min-width:20px;text-align:center;}
+.cart-footer{padding:20px 24px;border-top:1px solid var(--border);}
+.cart-subtotal{display:flex;justify-content:space-between;font-size:16px;font-weight:700;margin-bottom:16px;}
+.cart-note{font-size:12px;color:var(--muted);margin-bottom:16px;}
+.btn-checkout{width:100%;padding:15px;background:var(--ink);color:var(--white);border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;}
+
+/* TOAST */
+.toast{
+  position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);
+  background:var(--ink);color:var(--white);padding:12px 24px;border-radius:8px;
+  font-size:13px;font-weight:600;z-index:500;opacity:0;transition:all .3s;white-space:nowrap;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+.demo-badge{position:fixed;bottom:24px;right:24px;z-index:600;background:var(--ink);color:var(--white);padding:10px 18px;font-size:11px;letter-spacing:1px;text-transform:uppercase;border-radius:8px;font-weight:700;box-shadow:var(--shadow-md);}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(16px);transition:opacity .5s,transform .5s;}
+.reveal.visible{opacity:1;transform:none;}
+.d1{transition-delay:.07s;} .d2{transition-delay:.14s;} .d3{transition-delay:.21s;}
+
+svg{display:block;}
+</style>
+</head>
+<body>
+
+<!-- ANNOUNCE -->
+<div class="announce">Envío gratis en compras mayores a <span>$50.000</span> · Devoluciones sin costo en 30 días</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-top">
+    <a href="#" class="nav-logo">ASTRIA<span style="font-style:italic;font-size:14px;font-family:'DM Sans',sans-serif;font-weight:400;color:var(--muted);margin-left:8px;">e-commerce demo</span></a>
+    <div class="nav-links">
+      <a href="#" class="nav-link">Novedades</a>
+      <a href="#categorias" class="nav-link">Categorías</a>
+      <a href="#productos" class="nav-link">Más vendidos</a>
+      <a href="#" class="nav-link">Ofertas</a>
+      <a href="#" class="nav-link">Sobre nosotros</a>
+    </div>
+    <div class="nav-search-box">
+      <svg viewBox="0 0 20 20" fill="none"><circle cx="9" cy="9" r="5.5" stroke="#8A8780" stroke-width="1.5"/><path d="M13 13l3 3" stroke="#8A8780" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <input type="text" placeholder="Buscar productos...">
+    </div>
+    <div class="nav-right">
+      <button class="nav-icon-btn">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="1.5"/></svg>
+      </button>
+      <button class="nav-icon-btn">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" stroke="currentColor" stroke-width="1.5"/></svg>
+      </button>
+      <button class="nav-icon-btn" id="cartBtn">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" stroke="currentColor" stroke-width="1.5"/><line x1="3" y1="6" x2="21" y2="6" stroke="currentColor" stroke-width="1.5"/><path d="M16 10a4 4 0 01-8 0" stroke="currentColor" stroke-width="1.5"/></svg>
+        <span class="cart-count" id="cartCount">2</span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-tag"><span class="hero-tag-dot"></span>Nueva colección · Invierno 2026</div>
+    <h1>Estilo que<br><em>dura</em> toda<br>la temporada</h1>
+    <p class="hero-sub">Prendas y accesorios de calidad superior, diseñados para acompañarte en cada momento del día.</p>
+    <div class="hero-actions">
+      <a href="#productos" class="btn-dark">Ver colección</a>
+      <a href="#categorias" class="btn-light">Por categoría</a>
+    </div>
+    <div class="hero-social">
+      <div>
+        <div class="hero-social-num">+18.000</div>
+        <div>clientes satisfechos</div>
+      </div>
+      <div style="width:1px;height:32px;background:var(--border)"></div>
+      <div>
+        <div class="hero-social-num">4.9</div>
+        <div>calificación promedio</div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=900&q=85" alt="Colección invierno">
+    <div class="hero-right-badge">
+      <div class="hrb-label">Producto del mes</div>
+      <div class="hrb-name">Campera Wool Premium</div>
+      <div class="hrb-price">$89.990</div>
+      <button class="hrb-cta">Agregar al carrito</button>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST BAR -->
+<div class="trust-bar">
+  <div class="trust-item reveal">
+    <div class="trust-icon">
+      <svg viewBox="0 0 20 20" fill="none"><path d="M3 8h14M3 8l2-4h10l2 4M3 8v9a1 1 0 001 1h12a1 1 0 001-1V8" stroke="#3D3C3A" stroke-width="1.3" stroke-linecap="round"/></svg>
+    </div>
+    <div class="trust-text">
+      <div class="trust-title">Envío gratis</div>
+      <div class="trust-sub">En pedidos mayores a $50.000</div>
+    </div>
+  </div>
+  <div class="trust-item reveal d1">
+    <div class="trust-icon">
+      <svg viewBox="0 0 20 20" fill="none"><path d="M4 4v5h.6m11.8-2A8 8 0 004.6 9m0 0H9m6 7v-5h-.6m-11.8 2A8 8 0 0015.4 11m0 0H11" stroke="#3D3C3A" stroke-width="1.3" stroke-linecap="round"/></svg>
+    </div>
+    <div class="trust-text">
+      <div class="trust-title">Devoluciones 30 días</div>
+      <div class="trust-sub">Sin preguntas, sin costo</div>
+    </div>
+  </div>
+  <div class="trust-item reveal d2">
+    <div class="trust-icon">
+      <svg viewBox="0 0 20 20" fill="none"><path d="M9 12l2 2 4-4m5.6-4A11.9 11.9 0 0112 2.9a11.9 11.9 0 01-8.6 3.1A12 12 0 003 9c0 5.6 3.8 10.3 9 11.6C17.2 19.3 21 14.6 21 9c0-1-.1-2.1-.4-3z" stroke="#3D3C3A" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="trust-text">
+      <div class="trust-title">Pago seguro</div>
+      <div class="trust-sub">Tarjeta, transferencia y cuotas</div>
+    </div>
+  </div>
+  <div class="trust-item reveal d3">
+    <div class="trust-icon">
+      <svg viewBox="0 0 20 20" fill="none"><path d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" stroke="#3D3C3A" stroke-width="1.3"/></svg>
+    </div>
+    <div class="trust-text">
+      <div class="trust-title">Atención personalizada</div>
+      <div class="trust-sub">Lun–Sáb de 9 a 20 hs</div>
+    </div>
+  </div>
+</div>
+
+<!-- CATEGORIAS -->
+<section id="categorias" class="cats-section">
+  <div class="sec-header reveal">
+    <div class="sec-title">Explorá por <em>categoría</em></div>
+    <a href="#" class="sec-link">Ver todo →</a>
+  </div>
+  <div class="cats-grid reveal">
+    <div class="cat-card large">
+      <img src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=800&q=80" alt="Mujer">
+      <div class="cat-overlay"></div>
+      <div class="cat-info">
+        <div class="cat-name">Mujer</div>
+        <div class="cat-count">142 productos</div>
+        <div class="cat-cta">Ver colección →</div>
+      </div>
+    </div>
+    <div class="cat-card small">
+      <img src="https://images.unsplash.com/photo-1516257984-b1b4d707412e?w=600&q=80" alt="Hombre">
+      <div class="cat-overlay"></div>
+      <div class="cat-info">
+        <div class="cat-name">Hombre</div>
+        <div class="cat-count">98 productos</div>
+        <div class="cat-cta">Ver colección →</div>
+      </div>
+    </div>
+    <div class="cat-card small">
+      <img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600&q=80" alt="Accesorios">
+      <div class="cat-overlay"></div>
+      <div class="cat-info">
+        <div class="cat-name">Accesorios</div>
+        <div class="cat-count">64 productos</div>
+        <div class="cat-cta">Ver todo →</div>
+      </div>
+    </div>
+    <div class="cat-card small">
+      <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=80" alt="Calzado">
+      <div class="cat-overlay"></div>
+      <div class="cat-info">
+        <div class="cat-name">Calzado</div>
+        <div class="cat-count">87 productos</div>
+        <div class="cat-cta">Ver todo →</div>
+      </div>
+    </div>
+    <div class="cat-card small">
+      <img src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=600&q=80" alt="Ofertas">
+      <div class="cat-overlay"></div>
+      <div class="cat-info">
+        <div class="cat-name">Outlet</div>
+        <div class="cat-count">Hasta 50% off</div>
+        <div class="cat-cta">Ver ofertas →</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTOS -->
+<section id="productos" class="products-section">
+  <div class="sec-header reveal">
+    <div class="sec-title">Más <em>vendidos</em></div>
+    <a href="#" class="sec-link">Ver todos →</a>
+  </div>
+  <div class="products-filters reveal">
+    <button class="pf-btn active">Todos</button>
+    <button class="pf-btn">Mujer</button>
+    <button class="pf-btn">Hombre</button>
+    <button class="pf-btn">Accesorios</button>
+    <button class="pf-btn">Ofertas</button>
+    <button class="pf-btn">Novedades</button>
+  </div>
+  <div class="products-grid">
+
+    <div class="prod-card reveal">
+      <div class="prod-img">
+        <img src="https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=600&q=80" alt="Campera">
+        <span class="prod-badge pb-new">Nuevo</span>
+        <div class="prod-fav"><svg viewBox="0 0 20 20" fill="none"><path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" stroke="#111110" stroke-width="1.5"/></svg></div>
+        <button class="quick-add" onclick="addToCart('Campera Wool Premium', '$89.990')">Agregar al carrito</button>
+      </div>
+      <div class="prod-body">
+        <div class="prod-cat">Mujer · Abrigos</div>
+        <div class="prod-name">Campera Wool Premium</div>
+        <div class="prod-rating">
+          <div class="stars">
+            <svg class="star" viewBox="0 0 12 12"><path d="M6 0l1.5 4.5H12L8.3 7.3l1.4 4.4L6 9.2l-3.7 2.5L3.7 7.3 0 4.5h4.5z" fill="#111110"/></svg>
+            <svg class="star" viewBox="0 0 12 12"><path d="M6 0l1.5 4.5H12L8.3 7.3l1.4 4.4L6 9.2l-3.7 2.5L3.7 7.3 0 4.5h4.5z" fill="#111110"/></svg>
+            <svg class="star" viewBox="0 0 12 12"><path d="M6 0l1.5 4.5H12L8.3 7.3l1.4 4.4L6 9.2l-3.7 2.5L3.7 7.3 0 4.5h4.5z" fill="#111110"/></svg>
+            <svg class="star" viewBox="0 0 12 12"><path d="M6 0l1.5 4.5H12L8.3 7.3l1.4 4.4L6 9.2l-3.7 2.5L3.7 7.3 0 4.5h4.5z" fill="#111110"/></svg>
+            <svg class="star" viewBox="0 0 12 12"><path d="M6 0l1.5 4.5H12L8.3 7.3l1.4 4.4L6 9.2l-3.7 2.5L3.7 7.3 0 4.5h4.5z" fill="#111110"/></svg>
+          </div>
+          <span class="prod-rating-num">(128)</span>
+        </div>
+        <div class="prod-price-row"><span class="prod-price">$89.990</span></div>
+      </div>
+    </div>
+
+    <div class="prod-card reveal d1">
+      <div class="prod-img">
+        <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=80" alt="Zapatillas">
+        <span class="prod-badge pb-best">Top ventas</span>
+        <div class="prod-fav"><svg viewBox="0 0 20 20" fill="none"><path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" stroke="#111110" stroke-width="1.5"/></svg></div>
+        <button class="quick-add" onclick="addToCart('Runner Sport X', '$64.990')">Agregar al carrito</button>
+      </div>
+      <div class="prod-body">
+        <div class="prod-cat">Calzado · Deportivo</div>
+        <div class="prod-name">Runner Sport X</div>
+        <div class="prod-rating">
+          <div class="stars">
+            <svg class="star" viewBox="0 0 12 12"><path d="M6 0l1.5 4.5H12L8.3 7.3l1.4 4.4L6 9.2l-3.7 2.5L3.7 7.3 0 4.5h4.5z" fill="#111110"/></svg>
+            <svg class="star" viewBox="0 0 12 12"><path d="M6 0l1.5 4.5H12L8.3 7.3l1.4 4.4L6 9.2l-3.7 2.5L3.7 7.3 0 4.5h4.5z" fill="#111110"/></svg>
+            <svg class="star" viewBox="0 0 12 12"><path d="M6 0l1.5 4.5H12L8.3 7.3l1.4 4.4L6 9.2l-3.7 2.5L3.7 7.3 0 4.5h4.5z" fill="#111110"/></svg>
+            <svg class="star" viewBox="0 0 12 12"><path d="M6 0l1.5 4.5H12L8.3 7.3l1.4 4.4L6 9.2l-3.7 2.5L3.7 7.3 0 4.5h4.5z" fill="#111110"/></svg>
+            <svg class="star" viewBox="0 0 12 12"><path d="M6 0l1.5 4.5H12L8.3 7.3l1.4 4.4L6 9.2l-3.7 2.5L3.7 7.3 0 4.5h4.5z" fill="#C4C2BD"/></svg>
+          </div>
+          <span class="prod-rating-num">(94)</span>
+        </div>
+        <div class="prod-price-row"><span class="prod-price">$64.990</span></div>
+      </div>
+    </div>
+
+    <div class="prod-card reveal d2">
+      <div class="prod-img">
+        <img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600&q=80" alt="Mochila">
+        <span class="prod-badge pb-sale">-25%</span>
+        <div class="prod-fav"><svg viewBox="0 0 20 20" fill="none"><path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" stroke="#111110" stroke-width="1.5"/></svg></div>
+        <button class="quick-add" onclick="addToCart('Mochila Urban Pro', '$42.990')">Agregar al carrito</button>
+      </div>
+      <div class="prod-body">
+        <div class="prod-cat">Accesorios · Bolsos</div>
+        <div class="prod-name">Mochila Urban Pro</div>
+        <div class="prod-rating">
+          <div class="stars">
+            <svg class="star" viewBox="0 0 12 12"><path d="M6 0l1.5 4.5H12L8.3 7.3l1.4 4.4L6 9.2l-3.7 2.5L3.7 7.3 0 4.5h4.5z" fill="#111110"/></svg>
+            <svg class="star" viewBox="0 0 12 12"><path d="M6 0l1.5 4.5H12L8.3 7.3l1.4 4.4L6 9.2l-3.7 2.5L3.7 7.3 0 4.5h4.5z" fill="#111110"/></svg>
+            <svg class="star" viewBox="0 0 12 12"><path d="M6 0l1.5 4.5H12L8.3 7.3l1.4 4.4L6 9.2l-3.7 2.5L3.7 7.3 0 4.5h4.5z" fill="#111110"/></svg>
+            <svg class="star" viewBox="0 0 12 12"><path d="M6 0l1.5 4.5H12L8.3 7.3l1.4 4.4L6 9.2l-3.7 2.5L3.7 7.3 0 4.5h4.5z" fill="#111110"/></svg>
+            <svg class="star" viewBox="0 0 12 12"><path d="M6 0l1.5 4.5H12L8.3 7.3l1.4 4.4L6 9.2l-3.7 2.5L3.7 7.3 0 4.5h4.5z" fill="#111110"/></svg>
+          </div>
+          <span class="prod-rating-num">(56)</span>
+        </div>
+        <div class="prod-price-row">
+          <span class="prod-price">$42.990</span>
+          <span class="prod-price-old">$57.990</span>
+          <span class="prod-price-save">-25%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="prod-card reveal d3">
+      <div class="prod-img">
+        <img src="https://images.unsplash.com/photo-1516257984-b1b4d707412e?w=600&q=80" alt="Camisa">
+        <div class="prod-fav"><svg viewBox="0 0 20 20" fill="none"><path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" stroke="#111110" stroke-width="1.5"/></svg></div>
+        <button class="quick-add" onclick="addToCart('Camisa Oxford Slim', '$38.990')">Agregar al carrito</button>
+      </div>
+      <div class="prod-body">
+        <div class="prod-cat">Hombre · Camisas</div>
+        <div class="prod-name">Camisa Oxford Slim</div>
+        <div class="prod-rating">
+          <div class="stars">
+            <svg class="star" viewBox="0 0 12 12"><path d="M6 0l1.5 4.5H12L8.3 7.3l1.4 4.4L6 9.2l-3.7 2.5L3.7 7.3 0 4.5h4.5z" fill="#111110"/></svg>
+            <svg class="star" viewBox="0 0 12 12"><path d="M6 0l1.5 4.5H12L8.3 7.3l1.4 4.4L6 9.2l-3.7 2.5L3.7 7.3 0 4.5h4.5z" fill="#111110"/></svg>
+            <svg class="star" viewBox="0 0 12 12"><path d="M6 0l1.5 4.5H12L8.3 7.3l1.4 4.4L6 9.2l-3.7 2.5L3.7 7.3 0 4.5h4.5z" fill="#111110"/></svg>
+            <svg class="star" viewBox="0 0 12 12"><path d="M6 0l1.5 4.5H12L8.3 7.3l1.4 4.4L6 9.2l-3.7 2.5L3.7 7.3 0 4.5h4.5z" fill="#111110"/></svg>
+            <svg class="star" viewBox="0 0 12 12"><path d="M6 0l1.5 4.5H12L8.3 7.3l1.4 4.4L6 9.2l-3.7 2.5L3.7 7.3 0 4.5h4.5z" fill="#C4C2BD"/></svg>
+          </div>
+          <span class="prod-rating-num">(73)</span>
+        </div>
+        <div class="prod-price-row"><span class="prod-price">$38.990</span></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- BANNER -->
+<section class="banner-section">
+  <img src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=1600&q=80" alt="Banner colección">
+  <div class="banner-content">
+    <div class="banner-tag">Colección limitada</div>
+    <div class="banner-title">ASTRIA <em>e-commerce</em><br>demo</div>
+    <div class="banner-sub">Piezas seleccionadas para quienes buscan calidad y estilo sin compromisos.</div>
+    <a href="#" class="btn-white">Ver colección completa</a>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section class="reviews-section">
+  <div class="sec-header reveal">
+    <div class="sec-title">Lo que dicen <em>nuestros clientes</em></div>
+    <div style="font-size:13px;color:var(--muted)">4.9 · Más de 1.200 reseñas verificadas</div>
+  </div>
+  <div class="reviews-grid">
+    <div class="review-card reveal">
+      <div class="rev-stars">
+        <svg viewBox="0 0 12 12" width="14" height="14"><path d="M6 0l1.5 4.5H12L8.3 7.3l1.4 4.4L6 9.2l-3.7 2.5L3.7 7.3 0 4.5h4.5z" fill="#111110"/></svg>
+        <svg viewBox="0 0 12 12" width="14" height="14"><path d="M6 0l1.5 4.5H12L8.3 7.3l1.4 4.4L6 9.2l-3.7 2.5L3.7 7.3 0 4.5h4.5z" fill="#111110"/></svg>
+        <svg viewBox="0 0 12 12" width="14" height="14"><path d="M6 0l1.5 4.5H12L8.3 7.3l1.4 4.4L6 9.2l-3.7 2.5L3.7 7.3 0 4.5h4.5z" fill="#111110"/></svg>
+        <svg viewBox="0 0 12 12" width="14" height="14"><path d="M6 0l1.5 4.5H12L8.3 7.3l1.4 4.4L6 9.2l-3.7 2.5L3.7 7.3 0 4.5h4.5z" fill="#111110"/></svg>
+        <svg viewBox="0 0 12 12" width="14" height="14"><path d="M6 0l1.5 4.5H12L8.3 7.3l1.4 4.4L6 9.2l-3.7 2.5L3.7 7.3 0 4.5h4.5z" fill="#111110"/></svg>
+      </div>
+      <div class="rev-text">"La campera superó todas mis expectativas. El tejido es increíble y la terminación no tiene nada que envidiarle a marcas internacionales. La volvería a comprar sin dudarlo."</div>
+      <div class="rev-author">
+        <div class="rev-avatar" style="background:#1A1A18">VS</div>
+        <div>
+          <div class="rev-name">Valentina S.</div>
+          <div class="rev-product">Campera Wool Premium</div>
+          <div class="rev-verified"><svg width="10" height="10" viewBox="0 0 10 10"><path d="M2 5l2 2 4-4" stroke="#166534" stroke-width="1.5" stroke-linecap="round"/></svg>Compra verificada</div>
+        </div>
+      </div>
+    </div>
+    <div class="review-card reveal d1">
+      <div class="rev-stars">
+        <svg viewBox="0 0 12 12" width="14" height="14"><path d="M6 0l1.5 4.5H12L8.3 7.3l1.4 4.4L6 9.2l-3.7 2.5L3.7 7.3 0 4.5h4.5z" fill="#111110"/></svg>
+        <svg viewBox="0 0 12 12" width="14" height="14"><path d="M6 0l1.5 4.5H12L8.3 7.3l1.4 4.4L6 9.2l-3.7 2.5L3.7 7.3 0 4.5h4.5z" fill="#111110"/></svg>
+        <svg viewBox="0 0 12 12" width="14" height="14"><path d="M6 0l1.5 4.5H12L8.3 7.3l1.4 4.4L6 9.2l-3.7 2.5L3.7 7.3 0 4.5h4.5z" fill="#111110"/></svg>
+        <svg viewBox="0 0 12 12" width="14" height="14"><path d="M6 0l1.5 4.5H12L8.3 7.3l1.4 4.4L6 9.2l-3.7 2.5L3.7 7.3 0 4.5h4.5z" fill="#111110"/></svg>
+        <svg viewBox="0 0 12 12" width="14" height="14"><path d="M6 0l1.5 4.5H12L8.3 7.3l1.4 4.4L6 9.2l-3.7 2.5L3.7 7.3 0 4.5h4.5z" fill="#111110"/></svg>
+      </div>
+      <div class="rev-text">"Llegó rapidísimo y el packaging es hermoso. La mochila es exactamente como en las fotos, muy bien construida. Ya la recomendé a tres amigos."</div>
+      <div class="rev-author">
+        <div class="rev-avatar" style="background:#166534">MR</div>
+        <div>
+          <div class="rev-name">Matías R.</div>
+          <div class="rev-product">Mochila Urban Pro</div>
+          <div class="rev-verified"><svg width="10" height="10" viewBox="0 0 10 10"><path d="M2 5l2 2 4-4" stroke="#166534" stroke-width="1.5" stroke-linecap="round"/></svg>Compra verificada</div>
+        </div>
+      </div>
+    </div>
+    <div class="review-card reveal d2">
+      <div class="rev-stars">
+        <svg viewBox="0 0 12 12" width="14" height="14"><path d="M6 0l1.5 4.5H12L8.3 7.3l1.4 4.4L6 9.2l-3.7 2.5L3.7 7.3 0 4.5h4.5z" fill="#111110"/></svg>
+        <svg viewBox="0 0 12 12" width="14" height="14"><path d="M6 0l1.5 4.5H12L8.3 7.3l1.4 4.4L6 9.2l-3.7 2.5L3.7 7.3 0 4.5h4.5z" fill="#111110"/></svg>
+        <svg viewBox="0 0 12 12" width="14" height="14"><path d="M6 0l1.5 4.5H12L8.3 7.3l1.4 4.4L6 9.2l-3.7 2.5L3.7 7.3 0 4.5h4.5z" fill="#111110"/></svg>
+        <svg viewBox="0 0 12 12" width="14" height="14"><path d="M6 0l1.5 4.5H12L8.3 7.3l1.4 4.4L6 9.2l-3.7 2.5L3.7 7.3 0 4.5h4.5z" fill="#111110"/></svg>
+        <svg viewBox="0 0 12 12" width="14" height="14"><path d="M6 0l1.5 4.5H12L8.3 7.3l1.4 4.4L6 9.2l-3.7 2.5L3.7 7.3 0 4.5h4.5z" fill="#C4C2BD"/></svg>
+      </div>
+      <div class="rev-text">"La atención al cliente es excelente. Tuve un problema con la talla y lo resolvieron de inmediato, sin vueltas. Muy profesionales en todo momento."</div>
+      <div class="rev-author">
+        <div class="rev-avatar" style="background:#92400E">LC</div>
+        <div>
+          <div class="rev-name">Laura C.</div>
+          <div class="rev-product">Runner Sport X</div>
+          <div class="rev-verified"><svg width="10" height="10" viewBox="0 0 10 10"><path d="M2 5l2 2 4-4" stroke="#166534" stroke-width="1.5" stroke-linecap="round"/></svg>Compra verificada</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section class="newsletter">
+  <div class="nl-title reveal">Suscribite y ahorrá</div>
+  <div class="nl-sub reveal">Recibí ofertas exclusivas, novedades y acceso anticipado a liquidaciones.</div>
+  <div class="nl-form reveal">
+    <input class="nl-input" type="email" placeholder="tu@email.com">
+    <button class="nl-btn">Suscribirme</button>
+  </div>
+  <div class="nl-note reveal">Al suscribirte aceptás recibir comunicaciones de marketing. Podés darte de baja en cualquier momento.</div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <span class="footer-logo">ASTRIA</span>
+      <div class="footer-desc">Esta es una demo de e-commerce generada por ASTRIA. El diseño, productos y marca son ficticios y se adaptan al rubro del cliente.</div>
+    </div>
+    <div>
+      <div class="footer-col-label">Tienda</div>
+      <div class="footer-links">
+        <a href="#">Novedades</a>
+        <a href="#">Mujer</a>
+        <a href="#">Hombre</a>
+        <a href="#">Accesorios</a>
+        <a href="#">Outlet</a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-col-label">Ayuda</div>
+      <div class="footer-links">
+        <a href="#">Seguimiento de pedido</a>
+        <a href="#">Devoluciones</a>
+        <a href="#">Talles y medidas</a>
+        <a href="#">Preguntas frecuentes</a>
+        <a href="#">Contacto</a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-col-label">Empresa</div>
+      <div class="footer-links">
+        <a href="#">Quiénes somos</a>
+        <a href="#">Sustentabilidad</a>
+        <a href="#">Trabaja con nosotros</a>
+        <a href="#">Blog</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 ASTRIA Demo E-commerce · somosastria.com.ar · Todos los datos son ficticios</span>
+    <span>Diseño premium para tu negocio</span>
+  </div>
+</footer>
+
+<!-- CART DRAWER -->
+<div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-head">
+    <span class="cart-title">Tu carrito (2)</span>
+    <button class="cart-close" onclick="closeCart()">
+      <svg viewBox="0 0 16 16" fill="none"><path d="M4 4l8 8M12 4l-8 8" stroke="#111110" stroke-width="1.5" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+  <div class="cart-body">
+    <div class="cart-item">
+      <div class="cart-item-img"><img src="https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=200&q=80" alt="Campera"></div>
+      <div class="cart-item-info">
+        <div class="cart-item-name">Campera Wool Premium</div>
+        <div class="cart-item-variant">Color: Camel · Talle: M</div>
+        <div class="cart-item-price">$89.990</div>
+        <div class="cart-item-qty">
+          <button class="qty-btn">−</button>
+          <span class="qty-num">1</span>
+          <button class="qty-btn">+</button>
+        </div>
+      </div>
+    </div>
+    <div class="cart-item">
+      <div class="cart-item-img"><img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=200&q=80" alt="Mochila"></div>
+      <div class="cart-item-info">
+        <div class="cart-item-name">Mochila Urban Pro</div>
+        <div class="cart-item-variant">Color: Negro</div>
+        <div class="cart-item-price">$42.990</div>
+        <div class="cart-item-qty">
+          <button class="qty-btn">−</button>
+          <span class="qty-num">1</span>
+          <button class="qty-btn">+</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="cart-footer">
+    <div class="cart-subtotal"><span>Subtotal</span><span>$132.980</span></div>
+    <div class="cart-note">Envío y descuentos se calculan al finalizar la compra</div>
+    <button class="btn-checkout">Finalizar compra →</button>
+  </div>
+</div>
+
+<div class="demo-badge">Demo E-commerce · somosastria.com.ar</div>
+<div class="toast" id="toast"></div>
+
+<script>
+// Reveal
+const obs=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('visible');obs.unobserve(x.target);}});},{threshold:.08});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+// Filters
+document.querySelectorAll('.pf-btn').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.pf-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');}));
+
+// Cart
+document.getElementById('cartBtn').addEventListener('click',()=>{
+  document.getElementById('cartDrawer').classList.add('open');
+  document.getElementById('cartOverlay').classList.add('open');
+});
+function closeCart(){
+  document.getElementById('cartDrawer').classList.remove('open');
+  document.getElementById('cartOverlay').classList.remove('open');
+}
+
+// Add to cart
+function addToCart(name,price){
+  const toast=document.getElementById('toast');
+  toast.textContent=name+' agregado al carrito';
+  toast.classList.add('show');
+  setTimeout(()=>toast.classList.remove('show'),2500);
+}
+
+// Quick add buttons
+document.querySelectorAll('.quick-add').forEach(b=>{
+  b.addEventListener('click',e=>{e.stopPropagation();});
+});
+</script>
+</body>
+</html>

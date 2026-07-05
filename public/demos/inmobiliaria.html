@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ASTRIA Demo — Propiedades de Excepción</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --ink:#0B0A08;
+  --canvas:#F5F1EB;
+  --stone:#8C8070;
+  --gold:#A07840;
+  --gold-pale:#C8A870;
+  --white:#FEFEFE;
+  --border:rgba(160,120,64,0.18);
+  --overlay:rgba(11,10,8,0.52);
+}
+html{scroll-behavior:smooth;font-size:16px;}
+body{background:var(--ink);color:var(--canvas);font-family:'Outfit',sans-serif;overflow-x:hidden;}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:22px 56px;
+  transition:background .4s,border-color .4s;
+}
+nav.scrolled{background:rgba(11,10,8,0.94);border-bottom:1px solid var(--border);backdrop-filter:blur(16px);}
+.logo-mark{display:flex;align-items:center;gap:14px;}
+.logo-icon{width:36px;height:36px;border:1px solid var(--gold-pale);display:flex;align-items:center;justify-content:center;}
+.logo-icon svg{width:18px;height:18px;}
+.logo-name{font-family:'Playfair Display',serif;font-size:19px;letter-spacing:4px;text-transform:uppercase;color:var(--canvas);}
+.nav-links{display:flex;gap:40px;list-style:none;}
+.nav-links a{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:rgba(245,241,235,0.6);text-decoration:none;transition:color .2s;}
+.nav-links a:hover{color:var(--canvas);}
+.nav-cta{padding:11px 28px;border:1px solid var(--gold);color:var(--gold);font-size:11px;letter-spacing:2px;text-transform:uppercase;background:transparent;cursor:pointer;transition:all .25s;text-decoration:none;}
+.nav-cta:hover{background:var(--gold);color:var(--ink);}
+
+/* ── HERO ── */
+.hero{
+  position:relative;height:100vh;min-height:640px;
+  display:flex;flex-direction:column;justify-content:flex-end;
+  overflow:hidden;
+}
+.hero-bg{
+  position:absolute;inset:0;z-index:0;
+  background:
+    linear-gradient(180deg, rgba(11,10,8,0.15) 0%, rgba(11,10,8,0.0) 30%, rgba(11,10,8,0.72) 100%),
+    linear-gradient(135deg, #1A1510 0%, #2E2318 30%, #3D3020 55%, #2A2018 75%, #1A1510 100%);
+}
+/* Animated abstract "architecture" lines */
+.hero-lines{position:absolute;inset:0;z-index:1;overflow:hidden;}
+.hero-lines svg{width:100%;height:100%;opacity:0.18;}
+.hero-parallax{position:absolute;inset:0;z-index:1;}
+.hero-content{position:relative;z-index:10;padding:0 56px 72px;}
+.hero-eyebrow{
+  font-size:10px;letter-spacing:4px;text-transform:uppercase;
+  color:var(--gold-pale);margin-bottom:20px;
+  display:flex;align-items:center;gap:16px;
+}
+.hero-eyebrow::before{content:'';display:block;width:40px;height:1px;background:var(--gold-pale);}
+.hero h1{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(54px,6.5vw,96px);
+  font-weight:400;line-height:1.0;
+  margin-bottom:32px;max-width:700px;
+}
+.hero h1 em{font-style:italic;color:var(--gold-pale);}
+.hero-sub{font-size:16px;color:rgba(245,241,235,0.65);line-height:1.7;max-width:440px;margin-bottom:48px;}
+.hero-actions{display:flex;gap:16px;align-items:center;}
+.btn-primary{
+  padding:16px 40px;background:var(--gold);color:var(--ink);
+  font-size:11px;letter-spacing:2.5px;text-transform:uppercase;
+  border:none;cursor:pointer;transition:background .25s;text-decoration:none;display:inline-block;
+  font-family:'Outfit',sans-serif;font-weight:500;
+}
+.btn-primary:hover{background:var(--gold-pale);}
+.btn-secondary{
+  padding:16px 40px;border:1px solid rgba(245,241,235,0.35);
+  color:var(--canvas);font-size:11px;letter-spacing:2.5px;text-transform:uppercase;
+  background:transparent;cursor:pointer;transition:border-color .2s;text-decoration:none;display:inline-block;
+  font-family:'Outfit',sans-serif;
+}
+.btn-secondary:hover{border-color:var(--canvas);}
+
+/* scroll hint */
+.scroll-hint{
+  position:absolute;bottom:32px;right:56px;z-index:10;
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(245,241,235,0.4);
+}
+.scroll-line{width:1px;height:48px;background:linear-gradient(180deg,rgba(245,241,235,0.4),transparent);animation:scrollPulse 2s ease-in-out infinite;}
+@keyframes scrollPulse{0%,100%{opacity:.4;transform:scaleY(1);}50%{opacity:1;transform:scaleY(1.15);}}
+
+/* ── SEARCH BAR ── */
+.search-bar{
+  background:var(--white);
+  display:grid;grid-template-columns:1fr 1fr 1fr auto;
+  border-top:3px solid var(--gold);
+}
+.search-field{padding:24px 28px;border-right:1px solid #E8E4DC;cursor:pointer;}
+.search-field:last-of-type{border-right:none;}
+.sf-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--stone);margin-bottom:6px;}
+.sf-value{font-size:15px;color:var(--ink);font-weight:400;display:flex;align-items:center;justify-content:space-between;}
+.sf-arrow{font-size:12px;color:var(--stone);}
+.search-btn{
+  padding:0 40px;background:var(--ink);color:var(--white);
+  font-size:11px;letter-spacing:2px;text-transform:uppercase;
+  border:none;cursor:pointer;font-family:'Outfit',sans-serif;
+  transition:background .2s;
+}
+.search-btn:hover{background:#1E1C18;}
+
+/* ── STATS STRIP ── */
+.stats-strip{
+  background:var(--canvas);
+  display:grid;grid-template-columns:repeat(4,1fr);
+  border-bottom:1px solid rgba(140,128,112,0.2);
+}
+.stat-item{
+  padding:44px 40px;border-right:1px solid rgba(140,128,112,0.2);
+  color:var(--ink);
+}
+.stat-item:last-child{border-right:none;}
+.stat-number{
+  font-family:'Playfair Display',serif;font-size:52px;font-weight:400;
+  color:var(--ink);line-height:1;margin-bottom:8px;
+}
+.stat-number span{color:var(--gold);font-size:32px;}
+.stat-label{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--stone);}
+
+/* ── PROPIEDADES DESTACADAS ── */
+.section-propiedades{background:var(--canvas);padding:100px 56px;}
+.section-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:64px;}
+.sh-left{}
+.sh-kicker{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:12px;}
+.sh-title{font-family:'Playfair Display',serif;font-size:48px;font-weight:400;color:var(--ink);line-height:1.1;}
+.sh-title em{font-style:italic;}
+.sh-link{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--stone);text-decoration:none;border-bottom:1px solid var(--stone);padding-bottom:3px;transition:color .2s,border-color .2s;}
+.sh-link:hover{color:var(--gold);border-color:var(--gold);}
+
+.prop-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:20px;}
+.prop-grid-right{display:grid;grid-template-rows:1fr 1fr;gap:20px;}
+
+.prop-card{position:relative;overflow:hidden;cursor:pointer;background:var(--ink);}
+.prop-card::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(180deg,transparent 40%,rgba(11,10,8,0.88) 100%);
+  transition:opacity .4s;
+}
+.prop-card:hover::after{opacity:0.6;}
+.prop-bg{
+  width:100%;height:100%;min-height:320px;
+  transition:transform .7s cubic-bezier(.25,.46,.45,.94);
+}
+.prop-card:hover .prop-bg{transform:scale(1.05);}
+.prop-bg.pb1{background:linear-gradient(135deg,#1A2535 0%,#2A3A50 40%,#3A4F6A 70%,#1E2D42 100%);min-height:520px;}
+.prop-bg.pb2{background:linear-gradient(135deg,#2A1E14,#3D2D1E);}
+.prop-bg.pb3{background:linear-gradient(135deg,#1E2A1A,#2D3E28);}
+
+/* grid lines texture */
+.prop-bg::before{
+  content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(0deg,rgba(255,255,255,0.03) 0px,rgba(255,255,255,0.03) 1px,transparent 1px,transparent 80px),
+             repeating-linear-gradient(90deg,rgba(255,255,255,0.03) 0px,rgba(255,255,255,0.03) 1px,transparent 1px,transparent 80px);
+}
+
+.prop-info{
+  position:absolute;bottom:0;left:0;right:0;z-index:2;
+  padding:28px 32px;
+  transform:translateY(0);transition:transform .35s;
+}
+.prop-tag{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold-pale);margin-bottom:8px;}
+.prop-name{font-family:'Playfair Display',serif;font-size:26px;font-weight:400;color:var(--white);line-height:1.2;margin-bottom:6px;}
+.prop-card-sm .prop-name{font-size:20px;}
+.prop-price{font-size:14px;color:rgba(245,241,235,0.65);}
+.prop-specs{
+  display:flex;gap:20px;margin-top:16px;padding-top:16px;
+  border-top:1px solid rgba(245,241,235,0.12);
+  font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(245,241,235,0.45);
+  max-height:0;overflow:hidden;transition:max-height .35s,opacity .35s;opacity:0;
+}
+.prop-card:hover .prop-specs{max-height:60px;opacity:1;}
+
+/* ── BARRIOS ── */
+.section-barrios{background:var(--ink);padding:100px 56px;}
+.barrios-intro{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:end;margin-bottom:72px;}
+.barrios-title{font-family:'Playfair Display',serif;font-size:52px;font-weight:400;line-height:1.05;}
+.barrios-title em{font-style:italic;color:var(--gold-pale);}
+.barrios-text{font-size:16px;line-height:1.8;color:rgba(245,241,235,0.55);}
+.barrios-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(160,120,64,0.12);}
+.barrio-card{
+  background:var(--ink);padding:40px 36px;cursor:pointer;
+  border-bottom:2px solid transparent;
+  transition:border-color .3s,background .3s;
+}
+.barrio-card:hover{background:#110F0C;border-bottom-color:var(--gold);}
+.barrio-name{font-family:'Playfair Display',serif;font-size:24px;margin-bottom:12px;}
+.barrio-desc{font-size:14px;line-height:1.7;color:rgba(245,241,235,0.5);margin-bottom:24px;}
+.barrio-meta{display:flex;justify-content:space-between;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--stone);}
+.barrio-arrow{color:var(--gold);font-size:18px;opacity:0;transition:opacity .3s,transform .3s;transform:translateX(-8px);}
+.barrio-card:hover .barrio-arrow{opacity:1;transform:translateX(0);}
+
+/* ── PROCESO ── */
+.section-proceso{background:var(--canvas);padding:100px 56px;}
+.proceso-grid{display:grid;grid-template-columns:1fr 1fr;gap:100px;align-items:center;}
+.proceso-left{}
+.proceso-right{}
+.proceso-list{margin-top:48px;}
+.proceso-step{
+  display:grid;grid-template-columns:64px 1fr;gap:24px;
+  padding:28px 0;border-bottom:1px solid rgba(140,128,112,0.2);
+  cursor:pointer;transition:opacity .2s;
+}
+.proceso-step:first-child{border-top:1px solid rgba(140,128,112,0.2);}
+.proceso-step:hover{opacity:.75;}
+.step-num{
+  font-family:'Playfair Display',serif;font-size:38px;font-weight:400;
+  color:rgba(140,128,112,0.3);line-height:1;padding-top:4px;
+}
+.step-title{font-size:17px;font-weight:500;color:var(--ink);margin-bottom:6px;}
+.step-desc{font-size:14px;line-height:1.7;color:var(--stone);}
+.proceso-img{
+  aspect-ratio:4/5;background:linear-gradient(160deg,#1A1510,#2E2318,#3A2D20);
+  position:relative;overflow:hidden;
+}
+.proceso-img::before{
+  content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(45deg,rgba(160,120,64,0.04) 0px,rgba(160,120,64,0.04) 1px,transparent 1px,transparent 48px);
+}
+.proceso-img-badge{
+  position:absolute;bottom:32px;left:32px;right:32px;
+  background:rgba(245,241,235,0.95);padding:24px;
+  border-left:3px solid var(--gold);color:var(--ink);
+}
+.pib-num{font-family:'Playfair Display',serif;font-size:44px;font-weight:400;color:var(--gold);line-height:1;}
+.pib-label{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--stone);margin-top:4px;}
+
+/* ── CONTACTO ── */
+.section-contacto{background:var(--ink);padding:120px 56px;display:grid;grid-template-columns:1fr 1fr;gap:100px;align-items:start;}
+.contacto-left{}
+.cl-kicker{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:20px;}
+.cl-title{font-family:'Playfair Display',serif;font-size:52px;font-weight:400;line-height:1.0;margin-bottom:32px;}
+.cl-title em{font-style:italic;color:var(--gold-pale);}
+.cl-text{font-size:16px;line-height:1.8;color:rgba(245,241,235,0.55);margin-bottom:40px;max-width:400px;}
+.cl-contact-item{display:flex;gap:20px;margin-bottom:20px;align-items:flex-start;}
+.cci-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--stone);margin-bottom:4px;}
+.cci-value{font-size:15px;color:var(--canvas);}
+.contacto-form{}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+.form-field{display:flex;flex-direction:column;}
+.form-field.full{grid-column:span 2;}
+.form-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--stone);margin-bottom:8px;}
+.form-input{
+  background:transparent;border:none;border-bottom:1px solid rgba(245,241,235,0.15);
+  color:var(--canvas);padding:12px 0;font-family:'Outfit',sans-serif;font-size:15px;
+  outline:none;transition:border-color .2s;
+}
+.form-input:focus{border-color:var(--gold);}
+.form-input::placeholder{color:rgba(245,241,235,0.25);}
+.form-select{
+  background:transparent;border:none;border-bottom:1px solid rgba(245,241,235,0.15);
+  color:var(--canvas);padding:12px 0;font-family:'Outfit',sans-serif;font-size:15px;
+  outline:none;cursor:pointer;appearance:none;
+}
+.form-select option{background:var(--ink);}
+.form-submit{
+  width:100%;padding:18px;background:var(--gold);color:var(--ink);
+  font-family:'Outfit',sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;
+  font-weight:500;border:none;cursor:pointer;margin-top:24px;transition:background .25s;
+}
+.form-submit:hover{background:var(--gold-pale);}
+
+/* ── FOOTER ── */
+footer{
+  background:#080706;border-top:1px solid rgba(160,120,64,0.12);
+  padding:40px 56px;display:flex;justify-content:space-between;align-items:center;
+}
+.footer-logo{font-family:'Playfair Display',serif;font-size:20px;letter-spacing:4px;text-transform:uppercase;color:var(--canvas);}
+.footer-copy{font-size:12px;color:rgba(245,241,235,0.3);}
+
+/* DEMO BADGE */
+.demo-badge{
+  position:fixed;bottom:24px;right:24px;z-index:300;
+  background:var(--gold);color:var(--ink);
+  padding:10px 18px;font-size:10px;letter-spacing:2px;text-transform:uppercase;font-weight:500;
+  font-family:'Outfit',sans-serif;
+}
+
+/* REVEAL ANIMATIONS */
+.reveal{opacity:0;transform:translateY(32px);transition:opacity .7s ease,transform .7s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+.reveal-delay-1{transition-delay:.1s;}
+.reveal-delay-2{transition-delay:.2s;}
+.reveal-delay-3{transition-delay:.3s;}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="logo-mark">
+    <div class="logo-icon">
+      <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M9 1L17 6V12L9 17L1 12V6L9 1Z" stroke="#C8A870" stroke-width="1"/>
+        <path d="M9 5L13 7.5V12.5L9 15L5 12.5V7.5L9 5Z" fill="#C8A870" opacity="0.3"/>
+      </svg>
+    </div>
+    <div class="logo-name">ASTRIA Demo</div>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#propiedades">Propiedades</a></li>
+    <li><a href="#barrios">Barrios</a></li>
+    <li><a href="#proceso">Cómo trabajamos</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+  </ul>
+  <a href="#contacto" class="nav-cta">Consultar</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-lines">
+    <svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <linearGradient id="lg1" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#A07840" stop-opacity="0"/>
+          <stop offset="50%" stop-color="#A07840" stop-opacity="1"/>
+          <stop offset="100%" stop-color="#A07840" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      <!-- architectural perspective lines -->
+      <line x1="720" y1="400" x2="0" y2="900" stroke="url(#lg1)" stroke-width="0.5"/>
+      <line x1="720" y1="400" x2="1440" y2="900" stroke="url(#lg1)" stroke-width="0.5"/>
+      <line x1="720" y1="400" x2="200" y2="0" stroke="url(#lg1)" stroke-width="0.3"/>
+      <line x1="720" y1="400" x2="1200" y2="0" stroke="url(#lg1)" stroke-width="0.3"/>
+      <line x1="720" y1="400" x2="720" y2="0" stroke="url(#lg1)" stroke-width="0.4"/>
+      <!-- horizontal grid -->
+      <line x1="0" y1="600" x2="1440" y2="600" stroke="#A07840" stroke-width="0.3" opacity="0.3"/>
+      <line x1="0" y1="700" x2="1440" y2="700" stroke="#A07840" stroke-width="0.2" opacity="0.15"/>
+      <!-- abstract building silhouette -->
+      <rect x="580" y="200" width="8" height="600" fill="#A07840" opacity="0.06"/>
+      <rect x="840" y="280" width="6" height="520" fill="#A07840" opacity="0.06"/>
+      <rect x="680" y="150" width="4" height="650" fill="#A07840" opacity="0.04"/>
+    </svg>
+  </div>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow">Propiedades de excepción · Patagonia</div>
+    <h1>Donde el paisaje<br>define el <em>valor</em></h1>
+    <p class="hero-sub">Más de dos décadas conectando familias con propiedades que perduran. Asesoramiento discreto, sin apuros.</p>
+    <div class="hero-actions">
+      <a href="#propiedades" class="btn-primary">Explorar propiedades</a>
+      <a href="#contacto" class="btn-secondary">Tasar mi propiedad</a>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <div class="scroll-line"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<!-- SEARCH BAR -->
+<div class="search-bar" id="propiedades">
+  <div class="search-field">
+    <div class="sf-label">Operación</div>
+    <div class="sf-value">Comprar <span class="sf-arrow">▾</span></div>
+  </div>
+  <div class="search-field">
+    <div class="sf-label">Tipo</div>
+    <div class="sf-value">Departamentos <span class="sf-arrow">▾</span></div>
+  </div>
+  <div class="search-field">
+    <div class="sf-label">Zona</div>
+    <div class="sf-value">[Zona Centro] <span class="sf-arrow">▾</span></div>
+  </div>
+  <button class="search-btn">Buscar</button>
+</div>
+
+<!-- STATS -->
+<div class="stats-strip">
+  <div class="stat-item reveal">
+    <div class="stat-number">22<span>años</span></div>
+    <div class="stat-label">en el mercado local</div>
+  </div>
+  <div class="stat-item reveal reveal-delay-1">
+    <div class="stat-number">480+</div>
+    <div class="stat-label">propiedades escrituradas</div>
+  </div>
+  <div class="stat-item reveal reveal-delay-2">
+    <div class="stat-number">54</div>
+    <div class="stat-label">días promedio de venta</div>
+  </div>
+  <div class="stat-item reveal reveal-delay-3">
+    <div class="stat-number">97<span>%</span></div>
+    <div class="stat-label">clientes que vuelven</div>
+  </div>
+</div>
+
+<!-- PROPIEDADES -->
+<section class="section-propiedades">
+  <div class="section-head reveal">
+    <div class="sh-left">
+      <div class="sh-kicker">Selección actual</div>
+      <h2 class="sh-title">Propiedades <em>destacadas</em></h2>
+    </div>
+    <a href="#" class="sh-link">Ver catálogo completo →</a>
+  </div>
+
+  <div class="prop-grid reveal">
+    <div class="prop-card">
+      <div class="prop-bg pb1"></div>
+      <div class="prop-info">
+        <div class="prop-tag">Venta · Departamento · [Zona Centro]</div>
+        <div class="prop-name">Vista al Río Neuquén</div>
+        <div class="prop-price">USD 195.000</div>
+        <div class="prop-specs">
+          <span>3 ambientes</span>
+          <span>92 m²</span>
+          <span>1 cochera</span>
+          <span>7° piso</span>
+        </div>
+      </div>
+    </div>
+    <div class="prop-grid-right">
+      <div class="prop-card prop-card-sm">
+        <div class="prop-bg pb2"></div>
+        <div class="prop-info">
+          <div class="prop-tag">Venta · Casa · [Barrio Sur]</div>
+          <div class="prop-name">Jardín sobre el lago</div>
+          <div class="prop-price">USD 340.000</div>
+          <div class="prop-specs"><span>4 amb</span><span>220 m²</span><span>Pileta</span></div>
+        </div>
+      </div>
+      <div class="prop-card prop-card-sm">
+        <div class="prop-bg pb3"></div>
+        <div class="prop-info">
+          <div class="prop-tag">Alquiler · Oficina · Centro</div>
+          <div class="prop-name">Torre Centenario — Planta libre</div>
+          <div class="prop-price">$520.000 / mes</div>
+          <div class="prop-specs"><span>200 m²</span><span>2 cocheras</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BARRIOS -->
+<section class="section-barrios" id="barrios">
+  <div class="barrios-intro reveal">
+    <h2 class="barrios-title">Cada barrio,<br>una <em>historia</em></h2>
+    <p class="barrios-text">La Patagonia no es un telón de fondo. Es parte del valor de cada propiedad. Conocemos cada microzona, su proyección y lo que la hace única.</p>
+  </div>
+  <div class="barrios-grid reveal">
+    <div class="barrio-card">
+      <div class="barrio-name">[Zona Centro]</div>
+      <div class="barrio-desc">El corazón urbano con la mejor infraestructura. Departamentos de alta gama, oficinas premium y acceso a todos los servicios.</div>
+      <div class="barrio-meta">
+        <span>Desde USD 1.800/m²</span>
+        <span class="barrio-arrow">→</span>
+      </div>
+    </div>
+    <div class="barrio-card">
+      <div class="barrio-name">[Barrio Sur]</div>
+      <div class="barrio-desc">Barrio residencial consolidado. Casas con jardín, calles arboladas y la tranquilidad que pocas zonas de Neuquén pueden ofrecer.</div>
+      <div class="barrio-meta">
+        <span>Desde USD 1.200/m²</span>
+        <span class="barrio-arrow">→</span>
+      </div>
+    </div>
+    <div class="barrio-card">
+      <div class="barrio-name">[Barrio Norte]</div>
+      <div class="barrio-desc">Zona en expansión con las obras de infraestructura más importantes de la década. Oportunidad de inversión con alta rentabilidad proyectada.</div>
+      <div class="barrio-meta">
+        <span>Desde USD 900/m²</span>
+        <span class="barrio-arrow">→</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESO -->
+<section class="section-proceso" id="proceso">
+  <div class="proceso-grid">
+    <div class="proceso-left reveal">
+      <div class="sh-kicker" style="color:var(--gold)">Nuestro método</div>
+      <h2 class="sh-title" style="color:var(--ink)">Cómo <em>trabajamos</em></h2>
+      <div class="proceso-list">
+        <div class="proceso-step">
+          <div class="step-num">I</div>
+          <div>
+            <div class="step-title">Diagnóstico inicial</div>
+            <div class="step-desc">Entendemos tu situación, objetivos y plazos antes de mostrar una sola propiedad. Sin presión, con escucha real.</div>
+          </div>
+        </div>
+        <div class="proceso-step">
+          <div class="step-num">II</div>
+          <div>
+            <div class="step-title">Selección a medida</div>
+            <div class="step-desc">Filtramos nuestro portfolio para presentarte solo las propiedades que genuinamente encajan con lo que buscás.</div>
+          </div>
+        </div>
+        <div class="proceso-step">
+          <div class="step-num">III</div>
+          <div>
+            <div class="step-title">Acompañamiento legal</div>
+            <div class="step-desc">Coordinamos toda la documentación, el escribano y la financiación para que llegues a la escritura sin sorpresas.</div>
+          </div>
+        </div>
+        <div class="proceso-step">
+          <div class="step-num">IV</div>
+          <div>
+            <div class="step-title">Postventa activa</div>
+            <div class="step-desc">No desaparecemos al firmar. Seguimos disponibles para cualquier gestión posterior a la operación.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="proceso-right reveal reveal-delay-1">
+      <div class="proceso-img">
+        <div class="proceso-img-badge">
+          <div class="pib-num">54</div>
+          <div class="pib-label">Días promedio desde consulta hasta escritura</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACTO -->
+<section class="section-contacto" id="contacto">
+  <div class="contacto-left reveal">
+    <div class="cl-kicker">Contacto</div>
+    <h2 class="cl-title">Encontremos<br>tu propiedad <em>ideal</em></h2>
+    <p class="cl-text">Cada búsqueda es distinta. Contanos qué necesitás y te respondemos en menos de 24 horas con opciones reales.</p>
+    <div class="cl-contact-item">
+      <div>
+        <div class="cci-label">Oficina central</div>
+        <div class="cci-value">Av. Argentina 1240, piso 3 — [Ciudad]</div>
+      </div>
+    </div>
+    <div class="cl-contact-item">
+      <div>
+        <div class="cci-label">Teléfono</div>
+        <div class="cci-value">(XXX) XXX-XXXX</div>
+      </div>
+    </div>
+    <div class="cl-contact-item">
+      <div>
+        <div class="cci-label">Horario</div>
+        <div class="cci-value">Lun–Vie · 9:00 a 18:00 hs</div>
+      </div>
+    </div>
+  </div>
+  <div class="contacto-form reveal reveal-delay-1">
+    <div class="form-row">
+      <div class="form-field">
+        <label class="form-label">Nombre</label>
+        <input class="form-input" type="text" placeholder="Tu nombre completo">
+      </div>
+      <div class="form-field">
+        <label class="form-label">Email</label>
+        <input class="form-input" type="email" placeholder="tu@email.com">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-field">
+        <label class="form-label">Teléfono</label>
+        <input class="form-input" type="tel" placeholder="(299) 000-0000">
+      </div>
+      <div class="form-field">
+        <label class="form-label">Operación</label>
+        <select class="form-select form-input">
+          <option value="" disabled selected>Seleccioná</option>
+          <option>Comprar una propiedad</option>
+          <option>Alquilar</option>
+          <option>Vender o tasar</option>
+          <option>Invertir</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-field full">
+        <label class="form-label">Mensaje</label>
+        <input class="form-input" type="text" placeholder="Contanos qué buscás (zona, ambientes, presupuesto)">
+      </div>
+    </div>
+    <button class="form-submit">Enviar consulta</button>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">ASTRIA Demo</div>
+  <p class="footer-copy">© 2026 ASTRIA Demo Propiedades · Demo generada por ASTRIA · somosastria.com.ar</p>
+</footer>
+
+<div class="demo-badge">Demo Inmobiliaria · somosastria.com.ar</div>
+
+<script>
+// NAV scroll effect
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 60);
+});
+
+// Scroll reveal
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if(e.isIntersecting) {
+      e.target.classList.add('visible');
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+reveals.forEach(el => observer.observe(el));
+
+// Subtle hero parallax on scroll
+window.addEventListener('scroll', () => {
+  const heroLines = document.querySelector('.hero-lines svg');
+  if(heroLines) {
+    heroLines.style.transform = `translateY(${window.scrollY * 0.18}px)`;
+  }
+});
+</script>
+</body>
+</html>
