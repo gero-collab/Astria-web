@@ -121,6 +121,7 @@ export type Project = {
   desc: string;
   benefits: string[];
   shots: string[];
+  thumbnail?: string;
   live: string | null;
   href?: string;
   ctaLabel?: string;
@@ -138,6 +139,7 @@ export const projects: Project[] = [
       "Menos tiempo perdido con curiosos sin intención real",
     ],
     shots: ["Hero con parallax", "Propiedades destacadas", "Formulario de contacto"],
+    thumbnail: "/images/demo-thumbs/inmobiliaria.png",
     live: "/demos/inmobiliaria.html",
   },
   {
@@ -151,6 +153,7 @@ export const projects: Project[] = [
       "Test drives agendados sin que nadie atienda el teléfono",
     ],
     shots: ["Buscador de stock", "Ficha de vehículo", "Cotizador de tasación"],
+    thumbnail: "/images/demo-thumbs/concesionaria.png",
     live: "/demos/concesionaria.html",
   },
   {
@@ -164,6 +167,7 @@ export const projects: Project[] = [
       "Tus clientes resuelven dudas al toque, a cualquier hora",
     ],
     shots: ["Categorías", "Grilla de productos", "Carrito lateral"],
+    thumbnail: "/images/demo-thumbs/ecommerce.png",
     live: "/demos/ecommerce.html",
   },
   {
@@ -177,6 +181,7 @@ export const projects: Project[] = [
       "El copiloto hace el trabajo administrativo por vos",
     ],
     shots: ["Dashboard de KPIs", "Pipeline Kanban", "Reportes"],
+    thumbnail: "/images/demo-thumbs/orbi-crm.png",
     live: "/demos/orbi-crm.html",
   },
   {
