@@ -1,25 +1,53 @@
-# CODING AGENTS: READ THIS FIRST
+# ASTRIA — Sitio Web
 
-This is a **handoff bundle** from Claude Design (claude.ai/design).
+Sitio multipágina para ASTRIA, agencia de software y agentes IA. Implementado en **Next.js 14 (App Router)**, **TypeScript** y **Tailwind CSS**, a partir del diseño exportado desde Claude Design (ver `design/`).
 
-A user mocked up designs in HTML/CSS/JS using an AI design tool, then exported this bundle so a coding agent can implement the designs for real.
+## Páginas
 
-## What you should do — IMPORTANT
+- `/` — Home
+- `/servicios` — Servicios
+- `/demos` — Demos & proyectos (con lightbox de capturas)
+- `/precios` — Planes y comparativa de features
+- `/contacto` — Formulario de contacto
 
-**Read the chat transcripts first.** There are 1 chat transcript(s) in `chats/`. The transcripts show the full back-and-forth between the user and the design assistant — they tell you **what the user actually wants** and **where they landed** after iterating. Don't skip them. The final HTML files are the output, but the chat is where the intent lives.
+## Stack
 
-**Read `project/Astria.dc.html` in full.** The user had this file open when they triggered the handoff, so it's almost certainly the primary design they want built. Read it top to bottom — don't skim. Then **follow its imports**: open every file it pulls in (shared components, CSS, scripts) so you understand how the pieces fit together before you start implementing.
+- Next.js 14 App Router + TypeScript
+- Tailwind CSS 3
+- Starfield animado en `<canvas>` + anillos orbitales con parallax de mouse (`src/components/BackgroundLayers.tsx`)
+- Scroll reveals vía `IntersectionObserver` (`src/components/Reveal.tsx`)
+- Envío de formulario de contacto vía [Resend](https://resend.com) (`src/app/api/contact/route.ts`)
 
-**If anything is ambiguous, ask the user to confirm before you start implementing.** It's much cheaper to clarify scope up front than to build the wrong thing.
+## Desarrollo local
 
-## About the design files
+```bash
+npm install
+npm run dev
+```
 
-The design medium is **HTML/CSS/JS** — these are prototypes, not production code. Your job is to **recreate them pixel-perfectly** in whatever technology makes sense for the target codebase (React, Vue, native, whatever fits). Match the visual output; don't copy the prototype's internal structure unless it happens to fit.
+Abrí [http://localhost:3000](http://localhost:3000).
 
-**Don't render these files in a browser or take screenshots unless the user asks you to.** Everything you need — dimensions, colors, layout rules — is spelled out in the source. Read the HTML and CSS directly; a screenshot won't tell you anything they don't.
+## Variables de entorno
 
-## Bundle contents
+Copiá `.env.example` a `.env.local` y completá:
 
-- `README.md` — this file
-- `chats/` — conversation transcripts (read these!)
-- `project/` — the `# Sitio Web Multipágina ASTRIA` project files (HTML prototypes, assets, components)
+```
+RESEND_API_KEY=       # API key de Resend, requerida para que /contacto envíe emails
+CONTACT_FROM_EMAIL=   # remitente verificado en Resend (opcional mientras el dominio no esté verificado)
+```
+
+Sin `RESEND_API_KEY` configurada, el formulario de contacto muestra un mensaje de error pidiendo escribir directamente a somos@somosastria.com.ar.
+
+## Deploy en Vercel
+
+1. Importá el repo en Vercel.
+2. Configurá `RESEND_API_KEY` (y `CONTACT_FROM_EMAIL` si aplica) en las variables de entorno del proyecto.
+3. Deploy — no requiere configuración adicional (usa el build de Next.js por defecto).
+
+## Contenido editable
+
+Todo el contenido de texto (servicios, proyectos demo, planes, features) vive en `src/lib/data.ts`. Las capturas de los proyectos en `/demos` son placeholders (recuadro con patrón + texto) hasta que se agreguen imágenes reales; las URLs de "demo en vivo" están deshabilitadas (`live: null`) hasta contar con links públicos.
+
+## Diseño original
+
+La carpeta `design/` contiene el bundle de diseño exportado desde Claude Design (HTML/CSS/JS prototype, transcript del chat de diseño) que sirvió de referencia para esta implementación. No forma parte de la app.

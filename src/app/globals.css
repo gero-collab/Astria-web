@@ -1,0 +1,98 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes spin-r {
+  to {
+    transform: rotate(-360deg);
+  }
+}
+@keyframes floaty {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-14px);
+  }
+}
+@keyframes pulse-glow {
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.85;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  background: #000;
+  color: #e9ecf1;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: rgba(120, 160, 255, 0.35);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #000;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #3a3f48, #15171b);
+  border-radius: 8px;
+}
+
+@layer components {
+  .gradient-text {
+    @apply bg-gradient-to-b from-white via-[#d2d7de] to-[#f3f5f8] bg-clip-text text-transparent;
+    background-image: linear-gradient(180deg, #ffffff, #d2d7de 46%, #878d97 66%, #f3f5f8);
+  }
+
+  .gradient-text-chrome {
+    background-image: linear-gradient(180deg, #ffffff, #c4c9d0 45%, #7d838d 62%, #eef1f4);
+    @apply bg-clip-text text-transparent;
+  }
+
+  .gradient-text-silver {
+    background-image: linear-gradient(180deg, #fff, #9aa3ad);
+    @apply bg-clip-text text-transparent;
+  }
+
+  .eyebrow {
+    @apply font-chakra text-[12px] tracking-[0.34em] text-[#7e8ba8];
+  }
+
+  .glass-card {
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.03));
+    @apply rounded-[20px] border border-white/[0.14] backdrop-blur-[14px];
+  }
+
+  .chip-gold {
+    @apply inline-flex items-center gap-2 self-start rounded-full border border-[#cda552]/30 bg-[#cda552]/10 px-[13px] py-[7px] text-[12.5px] text-[#e7d4a6];
+  }
+
+  .btn-gold {
+    @apply cursor-pointer rounded-[13px] border-none px-[30px] py-[15px] text-[15.5px] font-semibold text-[#1a1405] shadow-[0_8px_30px_rgba(205,165,82,0.3)] transition-shadow duration-300 hover:shadow-[0_12px_40px_rgba(205,165,82,0.55)];
+    background: linear-gradient(180deg, #f6dca6, #cda552);
+  }
+
+  .btn-ghost {
+    @apply cursor-pointer rounded-[13px] border border-white/[0.16] px-[30px] py-[15px] text-[15.5px] font-medium text-[#e9ecf1] backdrop-blur-[10px] transition-colors duration-300 hover:border-white/40;
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+  }
+}
